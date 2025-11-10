@@ -1,0 +1,21 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "contact@xxanqw.pp.ua",
+                "Name": "Ivan Potiienko (xxanqw)"
+            }
+        ],
+        "Category": "Environment and Weather",
+        "Description": "A minimalist weather widget using wttr.in",
+        "Icon": "weather-clear",
+        "Id": "pp.ua.xxanqw.justweather",
+        "License": "GPL-3.0+",
+        "Name": "JustWeather",
+        "Version": "1.0",
+        "Website": "https://github.com/xxanqw/justweather"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-MainScript": "ui/main.qml"
+}

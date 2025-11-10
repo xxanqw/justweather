@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name=""/>
+
+  <group name="General">
+    <entry name="location" type="String">
+      <default>Kyiv</default>
+    </entry>
+    <entry name="temperatureUnit" type="Int">
+      <default>0</default>
+    </entry>
+    <entry name="updateInterval" type="Int">
+      <default>30</default>
+    </entry>
+    <entry name="showBackground" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="compactMode" type="Bool">
+      <default>true</default>
+    </entry>
+  </group>
+
+  <group name="Appearance">
+    <entry name="iconStyle" type="Int">
+      <default>0</default>
+    </entry>
+    <entry name="iconSize" type="Int">
+      <default>24</default>
+    </entry>
+    <entry name="showIcon" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="showTemperature" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="fontSize" type="Int">
+      <default>12</default>
+    </entry>
+    <entry name="boldFont" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="fullIconSize" type="Int">
+      <default>96</default>
+    </entry>
+    <entry name="fullTempSize" type="Int">
+      <default>48</default>
+    </entry>
+    <entry name="fullConditionSize" type="Int">
+      <default>18</default>
+    </entry>
+    <entry name="showFullIcon" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="showFullTemp" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="showCondition" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="fullBoldTemp" type="Bool">
+      <default>true</default>
+    </entry>
+  </group>
+</kcfg>
