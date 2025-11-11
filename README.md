@@ -13,6 +13,6 @@ Also it just made cause the default Plasma weather widget doesn't work with my h
 
 ---  
 
-Icons are made by [Bas Milius](https://github.com/basmilius/weather-icons) and licensed under [MIT License](icons/LICENSE).
+Icons are made by [Bas Milius](https://github.com/basmilius/weather-icons) and licensed under [MIT License](package/contents/icons/LICENSE).
 
 </div>
