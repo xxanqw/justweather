@@ -208,6 +208,31 @@ PlasmoidItem {
         }
     }
 
+    // Map Qt system locale to wttr.in language code
+    function getWttrLang() {
+        var locale = Qt.locale().name  // e.g., "zh_CN"
+        var lang = locale.toLowerCase().replace("_", "-")  // "zh-cn"
+        
+        var supportedLangs = [
+            "af","am","ar","az","ba","be","bg","bn","bs","by","ca","crk","cs","cy",
+            "da","de","el","en","eo","es","et","eu","fa","fi","fr","fy","ga","gl",
+            "he","hi","hr","hy","hu","ia","id","is","it","ja","jv","ka","kk","ko",
+            "ky","lt","lv","mg","mk","ml","mr","nb","nl","nn","oc","pa","pl","pt",
+            "pt-br","ro","ru","sk","sl","sr","sr-lat","sv","sw","ta","te","th","tr",
+            "ts","uk","vi","zh","zh-cn","zh-tw","zu"
+        ]
+        
+        if (supportedLangs.indexOf(lang) !== -1) {
+            return lang
+        }
+        // Fall back to just the language code (e.g., "en_US" -> "en")
+        var fallback = locale.substring(0, 2).toLowerCase()
+        if (supportedLangs.indexOf(fallback) !== -1) {
+            return fallback
+        }
+        return "en"
+    }
+
     // Function to fetch weather from wttr.in
     function fetchWeather() {
         if (!location) {
@@ -218,7 +243,7 @@ PlasmoidItem {
         loading = true
         
         var xhr = new XMLHttpRequest()
-        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1"
+        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1&lang=" + getWttrLang()
         
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
