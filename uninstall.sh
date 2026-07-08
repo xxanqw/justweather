@@ -17,8 +17,18 @@ echo
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Uninstalling JustWeather widget..."
-    kpackagetool6 -t Plasma/Applet -r $LEGACY_WIDGET_NAME 2>/dev/null || true
-    if kpackagetool6 -t Plasma/Applet -r $WIDGET_NAME; then
+    legacy_removed=false
+    canonical_removed=false
+
+    if kpackagetool6 -t Plasma/Applet -r "$LEGACY_WIDGET_NAME" 2>/dev/null; then
+        legacy_removed=true
+    fi
+
+    if kpackagetool6 -t Plasma/Applet -r "$WIDGET_NAME" 2>/dev/null; then
+        canonical_removed=true
+    fi
+
+    if [[ "$legacy_removed" == true || "$canonical_removed" == true ]]; then
         echo ""
         echo "✓ Uninstallation successful!"
         echo ""

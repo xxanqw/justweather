@@ -36,8 +36,8 @@ fi
 
 # Remove old installation if exists
 echo "Removing old installation (if exists)..."
-kpackagetool6 -t Plasma/Applet -r $WIDGET_NAME 2>/dev/null || true
-kpackagetool6 -t Plasma/Applet -r $LEGACY_WIDGET_NAME 2>/dev/null || true
+kpackagetool6 -t Plasma/Applet -r "$WIDGET_NAME" 2>/dev/null || true
+kpackagetool6 -t Plasma/Applet -r "$LEGACY_WIDGET_NAME" 2>/dev/null || true
 
 # Install the widget
 echo "Installing JustWeather widget..."
