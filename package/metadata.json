@@ -9,13 +9,16 @@
         ],
         "Category": "Environment and Weather",
         "Description": "A minimalist weather widget using wttr.in",
+        "Description[zh_CN]": "基于 wttr.in 的极简天气小部件",
         "Icon": "weather-clear",
         "Id": "pp.ua.xxanqw.justweather",
         "License": "GPL-3.0+",
         "Name": "JustWeather",
+        "Name[zh_CN]": "极简天气",
         "Version": "1.0",
         "Website": "https://github.com/xxanqw/justweather"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "X-Plasma-TranslationDomain": "plasma_applet_pp.ua.xxanqw.justweather"
 }

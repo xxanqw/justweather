@@ -1,0 +1,241 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: JustWeather\n"
+"Report-Msgid-Bugs-To: https://github.com/xxanqw/justweather/issues\n"
+"POT-Creation-Date: 2026-07-08 00:00+0000\n"
+"PO-Revision-Date: 2026-07-08 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Chinese\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ui/main.qml
+msgid "No location set"
+msgstr "未设置位置"
+
+#: ui/main.qml
+msgid "Refresh weather"
+msgstr "刷新天气"
+
+#: ui/main.qml
+msgid "Updating..."
+msgstr "更新中..."
+
+#: ui/main.qml
+msgid "Last update: %1"
+msgstr "上次更新: %1"
+
+#: ui/main.qml
+msgid "Error parsing data"
+msgstr "数据解析错误"
+
+#: ui/main.qml
+msgid "Error fetching data"
+msgstr "数据获取错误"
+
+#: config/config.qml
+msgid "General"
+msgstr "通用"
+
+#: config/config.qml
+msgid "Compact View"
+msgstr "紧凑视图"
+
+#: config/config.qml
+msgid "Desktop View"
+msgstr "桌面视图"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Location:"
+msgstr "位置:"
+
+#: ui/config/ConfigGeneral.qml
+msgid "City name, ZIP code, or coordinates"
+msgstr "城市名、邮政编码或坐标"
+
+#: ui/config/ConfigGeneral.qml
+msgid ""
+"Enter city name (e.g., 'London'), ZIP code (e.g., '10001'), or coordinates "
+"(e.g., '51.5074,-0.1278')"
+msgstr "输入城市名（如'北京'）、邮政编码（如'100000'）或坐标（如'39.9042,116.3974'）"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Temperature unit:"
+msgstr "温度单位:"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Choose between Celsius and Fahrenheit"
+msgstr "选择摄氏度或华氏度"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Update interval (minutes):"
+msgstr "更新间隔（分钟）:"
+
+#: ui/config/ConfigGeneral.qml
+msgid "How often to refresh weather data (5-120 minutes)"
+msgstr "多久刷新一次天气数据（5-120分钟）"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Display:"
+msgstr "显示:"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Show widget background"
+msgstr "显示小部件背景"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Show/hide the widget background panel"
+msgstr "显示/隐藏小部件背景面板"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Use compact mode"
+msgstr "使用紧凑模式"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Use compact view as default (recommended for panel)"
+msgstr "默认使用紧凑视图（推荐在面板中使用）"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Weather data provided by wttr.in"
+msgstr "天气数据由 wttr.in 提供"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Icon style:"
+msgstr "图标风格:"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Fill"
+msgstr "填充"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Line"
+msgstr "线条"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Choose between filled or line icons"
+msgstr "选择填充或线条图标"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Icon size (compact):"
+msgstr "图标大小（紧凑）:"
+
+#: ui/config/ConfigAppearance.qml
+msgid "%1 px"
+msgstr "%1 px"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Icon size in compact/panel mode"
+msgstr "紧凑/面板模式下的图标大小"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Show icon in compact mode"
+msgstr "紧凑模式下显示图标"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Display weather icon when widget is in panel"
+msgstr "小部件在面板中时显示天气图标"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Font size (compact):"
+msgstr "字体大小（紧凑）:"
+
+#: ui/config/ConfigAppearance.qml
+msgid "%1 pt"
+msgstr "%1 pt"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Temperature text size in compact/panel mode"
+msgstr "紧凑/面板模式下的温度文字大小"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Show temperature in compact mode"
+msgstr "紧凑模式下显示温度"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Display temperature when widget is in panel"
+msgstr "小部件在面板中时显示温度"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Use bold font"
+msgstr "使用粗体"
+
+#: ui/config/ConfigAppearance.qml ui/config/ConfigFullView.qml
+msgid "Make temperature text bold"
+msgstr "使温度文字加粗"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Preview:"
+msgstr "预览:"
+
+#: ui/config/ConfigAppearance.qml
+msgid "Compact mode preview:"
+msgstr "紧凑模式预览:"
+
+#: ui/config/ConfigFullView.qml
+msgid "Desktop Widget View:"
+msgstr "桌面小部件视图:"
+
+#: ui/config/ConfigFullView.qml
+msgid "Configure the appearance when widget is on desktop"
+msgstr "配置小部件在桌面时的外观"
+
+#: ui/config/ConfigFullView.qml
+msgid "Icon size:"
+msgstr "图标大小:"
+
+#: ui/config/ConfigFullView.qml
+msgid "Weather icon size in desktop mode"
+msgstr "桌面模式下的天气图标大小"
+
+#: ui/config/ConfigFullView.qml
+msgid "Show weather icon"
+msgstr "显示天气图标"
+
+#: ui/config/ConfigFullView.qml
+msgid "Display weather icon in desktop widget"
+msgstr "在桌面小部件中显示天气图标"
+
+#: ui/config/ConfigFullView.qml
+msgid "Temperature size:"
+msgstr "温度大小:"
+
+#: ui/config/ConfigFullView.qml
+msgid "Temperature text size in desktop mode"
+msgstr "桌面模式下的温度文字大小"
+
+#: ui/config/ConfigFullView.qml
+msgid "Show temperature"
+msgstr "显示温度"
+
+#: ui/config/ConfigFullView.qml
+msgid "Display temperature in desktop widget"
+msgstr "在桌面小部件中显示温度"
+
+#: ui/config/ConfigFullView.qml
+msgid "Bold temperature text"
+msgstr "温度文字加粗"
+
+#: ui/config/ConfigFullView.qml
+msgid "Weather condition size:"
+msgstr "天气状况大小:"
+
+#: ui/config/ConfigFullView.qml
+msgid "Weather condition text size (e.g., 'Partly cloudy')"
+msgstr "天气状况文字大小（如'晴'）"
+
+#: ui/config/ConfigFullView.qml
+msgid "Show weather condition"
+msgstr "显示天气状况"
+
+#: ui/config/ConfigFullView.qml
+msgid "Display weather condition description"
+msgstr "显示天气状况描述"
+
+#: ui/config/ConfigFullView.qml
+msgid ""
+"These settings apply to the desktop widget view only. For panel/compact view, "
+"use the 'Compact View' tab."
+msgstr "这些设置仅适用于桌面小部件视图。面板/紧凑视图请使用\"紧凑视图\"选项卡。"

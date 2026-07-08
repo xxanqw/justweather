@@ -16,16 +16,16 @@ KCM.SimpleKCM {
 
         // Location settings
         RowLayout {
-            Kirigami.FormData.label: "Location:"
+            Kirigami.FormData.label: i18n("Location:")
             Layout.fillWidth: true
 
             QQC2.TextField {
                 id: locationField
                 Layout.fillWidth: true
-                placeholderText: "City name, ZIP code, or coordinates"
+                placeholderText: i18n("City name, ZIP code, or coordinates")
                 
                 QQC2.ToolTip.visible: hovered
-                QQC2.ToolTip.text: "Enter city name (e.g., 'London'), ZIP code (e.g., '10001'), or coordinates (e.g., '51.5074,-0.1278')"
+                QQC2.ToolTip.text: i18n("Enter city name (e.g., 'London'), ZIP code (e.g., '10001'), or coordinates (e.g., '51.5074,-0.1278')")
             }
         }
 
@@ -36,23 +36,23 @@ KCM.SimpleKCM {
         // Temperature unit
         QQC2.ComboBox {
             id: tempUnitCombo
-            Kirigami.FormData.label: "Temperature unit:"
+            Kirigami.FormData.label: i18n("Temperature unit:")
             model: ["°C", "°F"]
             
             QQC2.ToolTip.visible: hovered
-            QQC2.ToolTip.text: "Choose between Celsius and Fahrenheit"
+            QQC2.ToolTip.text: i18n("Choose between Celsius and Fahrenheit")
         }
 
         // Update interval
         QQC2.SpinBox {
             id: updateIntervalSpinBox
-            Kirigami.FormData.label: "Update interval (minutes):"
+            Kirigami.FormData.label: i18n("Update interval (minutes):")
             from: 5
             to: 120
             stepSize: 5
             
             QQC2.ToolTip.visible: hovered
-            QQC2.ToolTip.text: "How often to refresh weather data (5-120 minutes)"
+            QQC2.ToolTip.text: i18n("How often to refresh weather data (5-120 minutes)")
         }
 
         Item {
@@ -62,19 +62,19 @@ KCM.SimpleKCM {
         // Display options
         QQC2.CheckBox {
             id: showBackgroundCheck
-            Kirigami.FormData.label: "Display:"
-            text: "Show widget background"
+            Kirigami.FormData.label: i18n("Display:")
+            text: i18n("Show widget background")
             
             QQC2.ToolTip.visible: hovered
-            QQC2.ToolTip.text: "Show/hide the widget background panel"
+            QQC2.ToolTip.text: i18n("Show/hide the widget background panel")
         }
 
         QQC2.CheckBox {
             id: compactModeCheck
-            text: "Use compact mode"
+            text: i18n("Use compact mode")
             
             QQC2.ToolTip.visible: hovered
-            QQC2.ToolTip.text: "Use compact view as default (recommended for panel)"
+            QQC2.ToolTip.text: i18n("Use compact view as default (recommended for panel)")
         }
 
         Item {
@@ -85,7 +85,7 @@ KCM.SimpleKCM {
         // Info label
         QQC2.Label {
             Layout.fillWidth: true
-            text: "Weather data provided by wttr.in"
+            text: i18n("Weather data provided by wttr.in")
             font.pointSize: Kirigami.Theme.smallFont.pointSize
             opacity: 0.6
             wrapMode: Text.WordWrap

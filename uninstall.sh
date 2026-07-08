@@ -16,6 +16,11 @@ echo
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Uninstalling JustWeather widget..."
+
+    # Remove translations
+    echo "Removing translations..."
+    find "$HOME/.local/share/locale" -name "plasma_applet_pp.ua.xxanqw.justweather.mo" -delete 2>/dev/null || true
+
     if kpackagetool6 -t Plasma/Applet -r $WIDGET_NAME; then
         echo ""
         echo "✓ Uninstallation successful!"
