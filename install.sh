@@ -5,7 +5,8 @@
 
 set -e
 
-WIDGET_NAME="com.github.justweather"
+WIDGET_NAME="pp.ua.xxanqw.justweather"
+LEGACY_WIDGET_NAME="com.github.justweather"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PACKAGE_DIR="$SCRIPT_DIR/package"
 
@@ -36,6 +37,7 @@ fi
 # Remove old installation if exists
 echo "Removing old installation (if exists)..."
 kpackagetool6 -t Plasma/Applet -r $WIDGET_NAME 2>/dev/null || true
+kpackagetool6 -t Plasma/Applet -r $LEGACY_WIDGET_NAME 2>/dev/null || true
 
 # Install the widget
 echo "Installing JustWeather widget..."

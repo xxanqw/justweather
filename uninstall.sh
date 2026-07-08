@@ -4,7 +4,8 @@
 
 set -e
 
-WIDGET_NAME="com.github.justweather"
+WIDGET_NAME="pp.ua.xxanqw.justweather"
+LEGACY_WIDGET_NAME="com.github.justweather"
 
 echo "========================================"
 echo "  JustWeather Widget Uninstaller"
@@ -16,6 +17,7 @@ echo
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Uninstalling JustWeather widget..."
+    kpackagetool6 -t Plasma/Applet -r $LEGACY_WIDGET_NAME 2>/dev/null || true
     if kpackagetool6 -t Plasma/Applet -r $WIDGET_NAME; then
         echo ""
         echo "✓ Uninstallation successful!"
