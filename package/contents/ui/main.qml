@@ -233,6 +233,21 @@ PlasmoidItem {
         return "en"
     }
 
+    // Read localized weather description from the lang-specific field
+    function getLocalizedWeatherDesc(current) {
+        var lang = getWttrLang()
+        var langField = "lang_" + lang  // e.g., "lang_zh-cn"
+        
+        if (current[langField] && current[langField][0] && current[langField][0].value) {
+            var localized = current[langField][0].value
+            if (localized !== "") {
+                return localized
+            }
+        }
+        // Fall back to default English description
+        return current.weatherDesc[0].value
+    }
+
     // Function to fetch weather from wttr.in
     function fetchWeather() {
         if (!location) {
@@ -283,8 +298,8 @@ PlasmoidItem {
             temperature = current.temp_F
         }
         
-        weatherCondition = current.weatherDesc[0].value
-        
+        weatherCondition = getLocalizedWeatherDesc(current)
+
         // Map weather condition to icon
         iconName = mapWeatherToIcon(current.weatherCode, isNightTime())
         
