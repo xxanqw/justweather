@@ -9,7 +9,8 @@ PlasmoidItem {
     id: root
 
     // Properties for weather data
-    property string temperature: "..."
+    property string temperatureC: "..."
+    property string temperatureF: "..."
     property string weatherCondition: "..."
     property string location: plasmoid.configuration.location
     property string iconName: "not-available"
@@ -20,6 +21,10 @@ PlasmoidItem {
     function getIconPath(iconName) {
         var style = plasmoid.configuration.iconStyle === 0 ? "fill" : "line"
         return Qt.resolvedUrl("../icons/" + style + "/all/" + iconName + ".svg")
+    }
+
+    function currentTemperature() {
+        return plasmoid.configuration.temperatureUnit === 0 ? temperatureC : temperatureF
     }
     
     // Widget size preferences
@@ -101,7 +106,7 @@ PlasmoidItem {
             }
 
             PlasmaComponents.Label {
-                text: root.temperature + (plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F")
+                text: root.currentTemperature() + (plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F")
                 font.pixelSize: plasmoid.configuration.fontSize
                 font.bold: plasmoid.configuration.boldFont
                 visible: plasmoid.configuration.showTemperature
@@ -177,7 +182,7 @@ PlasmoidItem {
 
                         PlasmaComponents.Label {
                             id: tempLabel
-                            text: root.temperature + (plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F")
+                            text: root.currentTemperature() + (plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F")
                             font.pixelSize: plasmoid.configuration.fullTempSize
                             font.bold: plasmoid.configuration.fullBoldTemp
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -208,6 +213,46 @@ PlasmoidItem {
         }
     }
 
+    // Map Qt system locale to wttr.in language code
+    function getWttrLang() {
+        var locale = Qt.locale().name  // e.g., "zh_CN"
+        var lang = locale.toLowerCase().replace("_", "-")  // "zh-cn"
+        
+        var supportedLangs = [
+            "af","am","ar","az","ba","be","bg","bn","bs","by","ca","crk","cs","cy",
+            "da","de","el","en","eo","es","et","eu","fa","fi","fr","fy","ga","gl",
+            "he","hi","hr","hy","hu","ia","id","is","it","ja","jv","ka","kk","ko",
+            "ky","lt","lv","mg","mk","ml","mr","nb","nl","nn","oc","pa","pl","pt",
+            "pt-br","ro","ru","sk","sl","sr","sr-lat","sv","sw","ta","te","th","tr",
+            "ts","uk","vi","zh","zh-cn","zh-tw","zu"
+        ]
+        
+        if (supportedLangs.indexOf(lang) !== -1) {
+            return lang
+        }
+        // Fall back to just the language code (e.g., "en_US" -> "en")
+        var fallback = locale.substring(0, 2).toLowerCase()
+        if (supportedLangs.indexOf(fallback) !== -1) {
+            return fallback
+        }
+        return "en"
+    }
+
+    // Read localized weather description from the lang-specific field
+    function getLocalizedWeatherDesc(current) {
+        var lang = getWttrLang()
+        var langField = "lang_" + lang  // e.g., "lang_zh-cn"
+        
+        if (current[langField] && current[langField][0] && current[langField][0].value) {
+            var localized = current[langField][0].value
+            if (localized !== "") {
+                return localized
+            }
+        }
+        // Fall back to default English description
+        return current.weatherDesc[0].value
+    }
+
     // Function to fetch weather from wttr.in
     function fetchWeather() {
         if (!location) {
@@ -218,7 +263,7 @@ PlasmoidItem {
         loading = true
         
         var xhr = new XMLHttpRequest()
-        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1"
+        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1&lang=" + getWttrLang()
         
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -251,15 +296,11 @@ PlasmoidItem {
 
         var current = data.current_condition[0]
         
-        // Get temperature based on user preference (0 = Celsius, 1 = Fahrenheit)
-        if (plasmoid.configuration.temperatureUnit === 0) {
-            temperature = current.temp_C
-        } else {
-            temperature = current.temp_F
-        }
+        temperatureC = current.temp_C
+        temperatureF = current.temp_F
         
-        weatherCondition = current.weatherDesc[0].value
-        
+        weatherCondition = getLocalizedWeatherDesc(current)
+
         // Map weather condition to icon
         iconName = mapWeatherToIcon(current.weatherCode, isNightTime())
         
@@ -267,7 +308,7 @@ PlasmoidItem {
         var now = new Date()
         lastUpdate = now.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
         
-        console.log("Weather updated:", temperature, weatherCondition, iconName)
+        console.log("Weather updated:", currentTemperature(), weatherCondition, iconName)
     }
 
     // Check if it's night time

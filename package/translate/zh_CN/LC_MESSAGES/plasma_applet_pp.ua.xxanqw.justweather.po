@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JustWeather\n"
 "Report-Msgid-Bugs-To: https://github.com/xxanqw/justweather/issues\n"
-"POT-Creation-Date: 2026-07-08 00:00+0000\n"
+"POT-Creation-Date: 2026-08-28 16:03+0200\n"
 "PO-Revision-Date: 2026-07-08 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Chinese\n"
@@ -11,30 +11,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-
-#: ui/main.qml
-msgid "No location set"
-msgstr "未设置位置"
-
-#: ui/main.qml
-msgid "Refresh weather"
-msgstr "刷新天气"
-
-#: ui/main.qml
-msgid "Updating..."
-msgstr "更新中..."
-
-#: ui/main.qml
-msgid "Last update: %1"
-msgstr "上次更新: %1"
-
-#: ui/main.qml
-msgid "Error parsing data"
-msgstr "数据解析错误"
-
-#: ui/main.qml
-msgid "Error fetching data"
-msgstr "数据获取错误"
 
 #: config/config.qml
 msgid "General"
@@ -47,60 +23,6 @@ msgstr "紧凑视图"
 #: config/config.qml
 msgid "Desktop View"
 msgstr "桌面视图"
-
-#: ui/config/ConfigGeneral.qml
-msgid "Location:"
-msgstr "位置:"
-
-#: ui/config/ConfigGeneral.qml
-msgid "City name, ZIP code, or coordinates"
-msgstr "城市名、邮政编码或坐标"
-
-#: ui/config/ConfigGeneral.qml
-msgid ""
-"Enter city name (e.g., 'London'), ZIP code (e.g., '10001'), or coordinates "
-"(e.g., '51.5074,-0.1278')"
-msgstr "输入城市名（如'北京'）、邮政编码（如'100000'）或坐标（如'39.9042,116.3974'）"
-
-#: ui/config/ConfigGeneral.qml
-msgid "Temperature unit:"
-msgstr "温度单位:"
-
-#: ui/config/ConfigGeneral.qml
-msgid "Choose between Celsius and Fahrenheit"
-msgstr "选择摄氏度或华氏度"
-
-#: ui/config/ConfigGeneral.qml
-msgid "Update interval (minutes):"
-msgstr "更新间隔（分钟）:"
-
-#: ui/config/ConfigGeneral.qml
-msgid "How often to refresh weather data (5-120 minutes)"
-msgstr "多久刷新一次天气数据（5-120分钟）"
-
-#: ui/config/ConfigGeneral.qml
-msgid "Display:"
-msgstr "显示:"
-
-#: ui/config/ConfigGeneral.qml
-msgid "Show widget background"
-msgstr "显示小部件背景"
-
-#: ui/config/ConfigGeneral.qml
-msgid "Show/hide the widget background panel"
-msgstr "显示/隐藏小部件背景面板"
-
-#: ui/config/ConfigGeneral.qml
-msgid "Use compact mode"
-msgstr "使用紧凑模式"
-
-#: ui/config/ConfigGeneral.qml
-msgid "Use compact view as default (recommended for panel)"
-msgstr "默认使用紧凑视图（推荐在面板中使用）"
-
-#: ui/config/ConfigGeneral.qml
-msgid "Weather data provided by wttr.in"
-msgstr "天气数据由 wttr.in 提供"
 
 #: ui/config/ConfigAppearance.qml
 msgid "Icon style:"
@@ -122,7 +44,7 @@ msgstr "选择填充或线条图标"
 msgid "Icon size (compact):"
 msgstr "图标大小（紧凑）:"
 
-#: ui/config/ConfigAppearance.qml
+#: ui/config/ConfigAppearance.qml ui/config/ConfigFullView.qml
 msgid "%1 px"
 msgstr "%1 px"
 
@@ -235,7 +157,81 @@ msgid "Display weather condition description"
 msgstr "显示天气状况描述"
 
 #: ui/config/ConfigFullView.qml
-msgid ""
-"These settings apply to the desktop widget view only. For panel/compact view, "
-"use the 'Compact View' tab."
+msgid "These settings apply to the desktop widget view only. For panel/compact view, use the 'Compact View' tab."
 msgstr "这些设置仅适用于桌面小部件视图。面板/紧凑视图请使用\"紧凑视图\"选项卡。"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Location:"
+msgstr "位置:"
+
+#: ui/config/ConfigGeneral.qml
+msgid "City name, ZIP code, or coordinates"
+msgstr "城市名、邮政编码或坐标"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Enter city name (e.g., 'London'), ZIP code (e.g., '10001'), or coordinates (e.g., '51.5074,-0.1278')"
+msgstr "输入城市名（如'北京'）、邮政编码（如'100000'）或坐标（如'39.9042,116.3974'）"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Temperature unit:"
+msgstr "温度单位:"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Choose between Celsius and Fahrenheit"
+msgstr "选择摄氏度或华氏度"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Update interval (minutes):"
+msgstr "更新间隔（分钟）:"
+
+#: ui/config/ConfigGeneral.qml
+msgid "How often to refresh weather data (5-120 minutes)"
+msgstr "多久刷新一次天气数据（5-120分钟）"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Display:"
+msgstr "显示:"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Show widget background"
+msgstr "显示小部件背景"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Show/hide the widget background panel"
+msgstr "显示/隐藏小部件背景面板"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Use compact mode"
+msgstr "使用紧凑模式"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Use compact view as default (recommended for panel)"
+msgstr "默认使用紧凑视图（推荐在面板中使用）"
+
+#: ui/config/ConfigGeneral.qml
+msgid "Weather data provided by wttr.in"
+msgstr "天气数据由 wttr.in 提供"
+
+#: ui/main.qml
+msgid "No location set"
+msgstr "未设置位置"
+
+#: ui/main.qml
+msgid "Refresh weather"
+msgstr "刷新天气"
+
+#: ui/main.qml
+msgid "Updating..."
+msgstr "更新中..."
+
+#: ui/main.qml
+msgid "Last update: %1"
+msgstr "上次更新: %1"
+
+#: ui/main.qml
+msgid "Error parsing data"
+msgstr "数据解析错误"
+
+#: ui/main.qml
+msgid "Error fetching data"
+msgstr "数据获取错误"
