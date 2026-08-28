@@ -9,7 +9,8 @@ PlasmoidItem {
     id: root
 
     // Properties for weather data
-    property string temperature: "..."
+    property string temperatureC: "..."
+    property string temperatureF: "..."
     property string weatherCondition: "..."
     property string location: plasmoid.configuration.location
     property string iconName: "not-available"
@@ -20,6 +21,10 @@ PlasmoidItem {
     function getIconPath(iconName) {
         var style = plasmoid.configuration.iconStyle === 0 ? "fill" : "line"
         return Qt.resolvedUrl("../icons/" + style + "/all/" + iconName + ".svg")
+    }
+
+    function currentTemperature() {
+        return plasmoid.configuration.temperatureUnit === 0 ? temperatureC : temperatureF
     }
     
     // Widget size preferences
@@ -101,7 +106,7 @@ PlasmoidItem {
             }
 
             PlasmaComponents.Label {
-                text: root.temperature + (plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F")
+                text: root.currentTemperature() + (plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F")
                 font.pixelSize: plasmoid.configuration.fontSize
                 font.bold: plasmoid.configuration.boldFont
                 visible: plasmoid.configuration.showTemperature
@@ -177,7 +182,7 @@ PlasmoidItem {
 
                         PlasmaComponents.Label {
                             id: tempLabel
-                            text: root.temperature + (plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F")
+                            text: root.currentTemperature() + (plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F")
                             font.pixelSize: plasmoid.configuration.fullTempSize
                             font.bold: plasmoid.configuration.fullBoldTemp
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -291,12 +296,8 @@ PlasmoidItem {
 
         var current = data.current_condition[0]
         
-        // Get temperature based on user preference (0 = Celsius, 1 = Fahrenheit)
-        if (plasmoid.configuration.temperatureUnit === 0) {
-            temperature = current.temp_C
-        } else {
-            temperature = current.temp_F
-        }
+        temperatureC = current.temp_C
+        temperatureF = current.temp_F
         
         weatherCondition = getLocalizedWeatherDesc(current)
 
@@ -307,7 +308,7 @@ PlasmoidItem {
         var now = new Date()
         lastUpdate = now.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
         
-        console.log("Weather updated:", temperature, weatherCondition, iconName)
+        console.log("Weather updated:", currentTemperature(), weatherCondition, iconName)
     }
 
     // Check if it's night time
