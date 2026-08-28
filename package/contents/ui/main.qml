@@ -208,6 +208,46 @@ PlasmoidItem {
         }
     }
 
+    // Map Qt system locale to wttr.in language code
+    function getWttrLang() {
+        var locale = Qt.locale().name  // e.g., "zh_CN"
+        var lang = locale.toLowerCase().replace("_", "-")  // "zh-cn"
+        
+        var supportedLangs = [
+            "af","am","ar","az","ba","be","bg","bn","bs","by","ca","crk","cs","cy",
+            "da","de","el","en","eo","es","et","eu","fa","fi","fr","fy","ga","gl",
+            "he","hi","hr","hy","hu","ia","id","is","it","ja","jv","ka","kk","ko",
+            "ky","lt","lv","mg","mk","ml","mr","nb","nl","nn","oc","pa","pl","pt",
+            "pt-br","ro","ru","sk","sl","sr","sr-lat","sv","sw","ta","te","th","tr",
+            "ts","uk","vi","zh","zh-cn","zh-tw","zu"
+        ]
+        
+        if (supportedLangs.indexOf(lang) !== -1) {
+            return lang
+        }
+        // Fall back to just the language code (e.g., "en_US" -> "en")
+        var fallback = locale.substring(0, 2).toLowerCase()
+        if (supportedLangs.indexOf(fallback) !== -1) {
+            return fallback
+        }
+        return "en"
+    }
+
+    // Read localized weather description from the lang-specific field
+    function getLocalizedWeatherDesc(current) {
+        var lang = getWttrLang()
+        var langField = "lang_" + lang  // e.g., "lang_zh-cn"
+        
+        if (current[langField] && current[langField][0] && current[langField][0].value) {
+            var localized = current[langField][0].value
+            if (localized !== "") {
+                return localized
+            }
+        }
+        // Fall back to default English description
+        return current.weatherDesc[0].value
+    }
+
     // Function to fetch weather from wttr.in
     function fetchWeather() {
         if (!location) {
@@ -218,7 +258,7 @@ PlasmoidItem {
         loading = true
         
         var xhr = new XMLHttpRequest()
-        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1"
+        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1&lang=" + getWttrLang()
         
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -258,8 +298,8 @@ PlasmoidItem {
             temperature = current.temp_F
         }
         
-        weatherCondition = current.weatherDesc[0].value
-        
+        weatherCondition = getLocalizedWeatherDesc(current)
+
         // Map weather condition to icon
         iconName = mapWeatherToIcon(current.weatherCode, isNightTime())
         
