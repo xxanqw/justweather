@@ -138,7 +138,7 @@ PlasmoidItem {
                 }
 
                 PlasmaComponents.Label {
-                    text: root.location || "No location set"
+                    text: root.location || i18n("No location set")
                     font.bold: true
                     font.pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.2
                     Layout.fillWidth: true
@@ -150,7 +150,7 @@ PlasmoidItem {
                     enabled: !root.loading
                     
                     PlasmaComponents.ToolTip {
-                        text: "Refresh weather"
+                        text: i18n("Refresh weather")
                     }
                 }
             }
@@ -205,7 +205,7 @@ PlasmoidItem {
 
             // Last update info
             PlasmaComponents.Label {
-                text: root.loading ? "Updating..." : "Last update: " + root.lastUpdate
+                text: root.loading ? i18n("Updating...") : i18n("Last update: %1", root.lastUpdate)
                 font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                 opacity: 0.6
                 Layout.alignment: Qt.AlignHCenter
@@ -274,11 +274,11 @@ PlasmoidItem {
                         parseWeatherData(data)
                     } catch (e) {
                         console.error("Error parsing weather data:", e)
-                        weatherCondition = "Error parsing data"
+                        weatherCondition = i18n("Error parsing data")
                     }
                 } else {
                     console.error("Error fetching weather:", xhr.status)
-                    weatherCondition = "Error fetching data"
+                    weatherCondition = i18n("Error fetching data")
                 }
             }
         }

@@ -3,17 +3,17 @@ import org.kde.plasma.configuration
 
 ConfigModel {
     ConfigCategory {
-         name: "General"
+         name: i18n("General")
          icon: "preferences-system-windows"
          source: "config/ConfigGeneral.qml"
     }
     ConfigCategory {
-         name: "Compact View"
+         name: i18n("Compact View")
          icon: "preferences-desktop-theme"
          source: "config/ConfigAppearance.qml"
     }
     ConfigCategory {
-         name: "Desktop View"
+         name: i18n("Desktop View")
          icon: "preferences-desktop-display"
          source: "config/ConfigFullView.qml"
     }
