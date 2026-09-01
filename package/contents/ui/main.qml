@@ -373,8 +373,8 @@ PlasmoidItem {
 
         weatherCondition = getLocalizedWeatherDesc(current)
 
-        // Map weather condition to icon
-        iconName = mapWeatherToIcon(current.weatherCode, isNightTime())
+        // Map weather condition to icon using the selected location's local time.
+        iconName = mapWeatherToIcon(current.weatherCode, isNightTime(current, today))
 
         // Update last refresh time
         var now = new Date()
@@ -383,8 +383,43 @@ PlasmoidItem {
         console.log("Weather updated:", currentTemperature(), weatherCondition, iconName)
     }
 
-    // Check if it's night time
-    function isNightTime() {
+    function parseClockMinutes(value) {
+        if (!value) {
+            return -1
+        }
+
+        var match = value.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i)
+        if (!match) {
+            return -1
+        }
+
+        var hour = parseInt(match[1])
+        var minute = parseInt(match[2])
+        var period = match[3].toUpperCase()
+
+        if (period === "AM" && hour === 12) {
+            hour = 0
+        } else if (period === "PM" && hour !== 12) {
+            hour += 12
+        }
+
+        return hour * 60 + minute
+    }
+
+    // Check day/night against sunrise and sunset at the selected location.
+    function isNightTime(current, today) {
+        var astronomy = today && today.astronomy && today.astronomy.length > 0
+            ? today.astronomy[0]
+            : null
+        var localMinutes = current ? parseClockMinutes(current.localObsDateTime) : -1
+        var sunriseMinutes = astronomy ? parseClockMinutes(astronomy.sunrise) : -1
+        var sunsetMinutes = astronomy ? parseClockMinutes(astronomy.sunset) : -1
+
+        if (localMinutes >= 0 && sunriseMinutes >= 0 && sunsetMinutes >= 0) {
+            return localMinutes < sunriseMinutes || localMinutes >= sunsetMinutes
+        }
+
+        // Fall back to system time when astronomy data is unavailable.
         var hour = new Date().getHours()
         return hour < 6 || hour >= 20
     }
@@ -405,15 +440,15 @@ PlasmoidItem {
             iconPath = "partly-cloudy" + daySuffix
         }
         // Cloudy
-        else if (codeInt === 119 || codeInt === 122) {
+        else if (codeInt === 119) {
             iconPath = "cloudy"
         }
         // Overcast
-        else if (codeInt === 143 || codeInt === 248 || codeInt === 260) {
+        else if (codeInt === 122) {
             iconPath = "overcast" + daySuffix
         }
         // Fog/Mist
-        else if (codeInt === 248 || codeInt === 260 || codeInt === 143) {
+        else if ([143, 248, 260].includes(codeInt)) {
             iconPath = "fog" + daySuffix
         }
         // Rain
@@ -421,11 +456,11 @@ PlasmoidItem {
             iconPath = "rain"
         }
         // Snow
-        else if ([179, 227, 230, 323, 326, 329, 332, 335, 338, 368, 371, 374, 377].includes(codeInt)) {
+        else if ([179, 227, 230, 323, 326, 329, 332, 335, 338, 368, 371].includes(codeInt)) {
             iconPath = "snow"
         }
-        // Sleet
-        else if ([182, 185, 281, 284, 311, 314, 317, 350, 362, 365, 374].includes(codeInt)) {
+        // Sleet/Ice pellets
+        else if ([182, 185, 281, 284, 311, 314, 317, 350, 362, 365, 374, 377].includes(codeInt)) {
             iconPath = "sleet"
         }
         // Thunderstorm
