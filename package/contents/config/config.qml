@@ -17,4 +17,9 @@ ConfigModel {
          icon: "preferences-desktop-display"
          source: "config/ConfigFullView.qml"
     }
+    ConfigCategory {
+         name: i18n("Forecast")
+         icon: "view-calendar-week"
+         source: "config/ConfigForecast.qml"
+    }
 }

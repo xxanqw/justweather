@@ -70,4 +70,43 @@
       <default>true</default>
     </entry>
   </group>
+
+  <group name="Forecast">
+    <entry name="showHourlyForecast" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="hourlyForecastHours" type="Int">
+      <default>12</default>
+    </entry>
+    <entry name="hourlyForecastStep" type="Int">
+      <default>2</default>
+    </entry>
+    <entry name="hourlyTemperatureMode" type="Int">
+      <default>0</default>
+    </entry>
+    <entry name="showHourlyIcons" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="showHourlyPrecipitation" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="showDailyForecast" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="forecastDays" type="Int">
+      <default>7</default>
+    </entry>
+    <entry name="forecastIncludesToday" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="dailyTemperatureMode" type="Int">
+      <default>0</default>
+    </entry>
+    <entry name="showDailyIcons" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="showDailyPrecipitation" type="Bool">
+      <default>true</default>
+    </entry>
+  </group>
 </kcfg>
