@@ -1,189 +1,192 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the JustWeather package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: JustWeather\n"
 "Report-Msgid-Bugs-To: https://github.com/xxanqw/justweather/issues\n"
 "POT-Creation-Date: 2026-09-01 22:00+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-09-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
 
 #: config/config.qml:17
 msgid "General"
-msgstr ""
+msgstr "عام"
 
 #: config/config.qml:22
 msgid "Compact View"
-msgstr ""
+msgstr "العرض المدمج"
 
 #: config/config.qml:27
 msgid "Desktop View"
-msgstr ""
+msgstr "عرض سطح المكتب"
 
 #: config/config.qml:32
 msgid "Forecast"
-msgstr ""
+msgstr "التوقعات"
 
 #: ui/config/ConfigAppearance.qml:37
 msgid "Icon style:"
-msgstr ""
+msgstr "نمط الأيقونات:"
 
 #: ui/config/ConfigAppearance.qml:38
 msgid "Fill"
-msgstr ""
+msgstr "ممتلئة"
 
 #: ui/config/ConfigAppearance.qml:38
 msgid "Line"
-msgstr ""
+msgstr "خطية"
 
 #: ui/config/ConfigAppearance.qml:41
 msgid "Choose between filled or line icons"
-msgstr ""
+msgstr "اختر بين الأيقونات الممتلئة والخطية"
 
 #: ui/config/ConfigAppearance.qml:46
 msgid "Icon size (compact):"
-msgstr ""
+msgstr "حجم الأيقونة (مدمج):"
 
 #: ui/config/ConfigAppearance.qml:52 ui/config/ConfigFullView.qml:55
 #: ui/config/ConfigFullView.qml:83 ui/config/ConfigFullView.qml:119
 msgid "%1 px"
-msgstr ""
+msgstr "%1 بكسل"
 
 #: ui/config/ConfigAppearance.qml:56
 msgid "Icon size in compact/panel mode"
-msgstr ""
+msgstr "حجم الأيقونة في الوضع المدمج أو اللوحة"
 
 #: ui/config/ConfigAppearance.qml:61
 msgid "Show icon in compact mode"
-msgstr ""
+msgstr "إظهار الأيقونة في الوضع المدمج"
 
 #: ui/config/ConfigAppearance.qml:64
 msgid "Display weather icon when widget is in panel"
-msgstr ""
+msgstr "إظهار أيقونة الطقس عند وضع الأداة في اللوحة"
 
 #: ui/config/ConfigAppearance.qml:74
 msgid "Temperature value:"
-msgstr ""
+msgstr "قيمة درجة الحرارة:"
 
 #: ui/config/ConfigAppearance.qml:75 ui/config/ConfigForecast.qml:76
 #: ui/config/ConfigForecast.qml:119
 msgid "Actual"
-msgstr ""
+msgstr "الفعلية"
 
 #: ui/config/ConfigAppearance.qml:75 ui/config/ConfigForecast.qml:76
 #: ui/config/ConfigForecast.qml:119
 msgid "Feels like"
-msgstr ""
+msgstr "المحسوسة"
 
 #: ui/config/ConfigAppearance.qml:78
 msgid "Choose which temperature is shown in compact mode"
-msgstr ""
+msgstr "اختر درجة الحرارة المعروضة في الوضع المدمج"
 
 #: ui/config/ConfigAppearance.qml:83
 msgid "Font size (compact):"
-msgstr ""
+msgstr "حجم الخط (مدمج):"
 
 #: ui/config/ConfigAppearance.qml:89
 msgid "%1 pt"
-msgstr ""
+msgstr "%1 نقطة"
 
 #: ui/config/ConfigAppearance.qml:93
 msgid "Temperature text size in compact/panel mode"
-msgstr ""
+msgstr "حجم نص درجة الحرارة في الوضع المدمج أو اللوحة"
 
 #: ui/config/ConfigAppearance.qml:98
 msgid "Show temperature in compact mode"
-msgstr ""
+msgstr "إظهار درجة الحرارة في الوضع المدمج"
 
 #: ui/config/ConfigAppearance.qml:101
 msgid "Display temperature when widget is in panel"
-msgstr ""
+msgstr "إظهار درجة الحرارة عند وضع الأداة في اللوحة"
 
 #: ui/config/ConfigAppearance.qml:106
 msgid "Use bold font"
-msgstr ""
+msgstr "استخدام خط عريض"
 
 #: ui/config/ConfigAppearance.qml:109 ui/config/ConfigFullView.qml:103
 msgid "Make temperature text bold"
-msgstr ""
+msgstr "عرض درجة الحرارة بخط عريض"
 
 #: ui/config/ConfigAppearance.qml:123
 msgid "Preview:"
-msgstr ""
+msgstr "معاينة:"
 
 #: ui/config/ConfigAppearance.qml:124
 msgid "Compact mode preview:"
-msgstr ""
+msgstr "معاينة الوضع المدمج:"
 
 #: ui/config/ConfigForecast.qml:45
 msgid "Hourly forecast:"
-msgstr ""
+msgstr "التوقعات لكل ساعة:"
 
 #: ui/config/ConfigForecast.qml:46
 msgid "Show weather changes during the day"
-msgstr ""
+msgstr "إظهار تغيرات الطقس خلال اليوم"
 
 #: ui/config/ConfigForecast.qml:51
 msgid "Forecast horizon:"
-msgstr ""
+msgstr "مدة التوقعات:"
 
 #: ui/config/ConfigForecast.qml:57
 msgid "%1 hour"
 msgid_plural "%1 hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "لا ساعات"
+msgstr[1] "ساعة واحدة"
+msgstr[2] "ساعتان"
+msgstr[3] "%1 ساعات"
+msgstr[4] "%1 ساعة"
+msgstr[5] "%1 ساعة"
 
 #: ui/config/ConfigForecast.qml:63
 msgid "Display interval:"
-msgstr ""
+msgstr "فاصل العرض:"
 
 #: ui/config/ConfigForecast.qml:69
 msgid "Every %1 hour"
 msgid_plural "Every %1 hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "كل ساعة"
+msgstr[1] "كل ساعة"
+msgstr[2] "كل ساعتين"
+msgstr[3] "كل %1 ساعات"
+msgstr[4] "كل %1 ساعة"
+msgstr[5] "كل %1 ساعة"
 
 #: ui/config/ConfigForecast.qml:75
 msgid "Temperature:"
-msgstr ""
+msgstr "درجة الحرارة:"
 
 #: ui/config/ConfigForecast.qml:82 ui/config/ConfigForecast.qml:125
 msgid "Show condition icons"
-msgstr ""
+msgstr "إظهار أيقونات حالة الطقس"
 
 #: ui/config/ConfigForecast.qml:88 ui/config/ConfigForecast.qml:131
 msgid "Show precipitation probability"
-msgstr ""
+msgstr "إظهار احتمال الهطول"
 
 #: ui/config/ConfigForecast.qml:98
 msgid "Daily forecast:"
-msgstr ""
+msgstr "التوقعات اليومية:"
 
 #: ui/config/ConfigForecast.qml:99
 msgid "Show multi-day forecast"
-msgstr ""
+msgstr "إظهار توقعات عدة أيام"
 
 #: ui/config/ConfigForecast.qml:104
 msgid "Number of days:"
-msgstr ""
+msgstr "عدد الأيام:"
 
 #: ui/config/ConfigForecast.qml:112
 msgid "Include today"
-msgstr ""
+msgstr "تضمين اليوم"
 
 #: ui/config/ConfigForecast.qml:118
 msgid "Temperature range:"
-msgstr ""
+msgstr "نطاق درجة الحرارة:"
 
 #: ui/config/ConfigForecast.qml:142
 msgid ""
@@ -191,230 +194,240 @@ msgid ""
 "disabled by default to preserve the minimal layout. Forecast data provided "
 "by Open-Meteo."
 msgstr ""
+"تظهر أقسام التوقعات فقط في العرض الموسع وعرض سطح المكتب. وهي معطلة افتراضيًا "
+"للحفاظ على التصميم البسيط. بيانات التوقعات مقدمة من Open-Meteo."
 
 #: ui/config/ConfigFullView.qml:35
 msgid "Desktop Widget View:"
-msgstr ""
+msgstr "عرض أداة سطح المكتب:"
 
 #: ui/config/ConfigFullView.qml:36
 msgid "Configure the appearance when widget is on desktop"
-msgstr ""
+msgstr "اضبط مظهر الأداة على سطح المكتب"
 
 #: ui/config/ConfigFullView.qml:49
 msgid "Icon size:"
-msgstr ""
+msgstr "حجم الأيقونة:"
 
 #: ui/config/ConfigFullView.qml:59
 msgid "Weather icon size in desktop mode"
-msgstr ""
+msgstr "حجم أيقونة الطقس في وضع سطح المكتب"
 
 #: ui/config/ConfigFullView.qml:64
 msgid "Show weather icon"
-msgstr ""
+msgstr "إظهار أيقونة الطقس"
 
 #: ui/config/ConfigFullView.qml:67
 msgid "Display weather icon in desktop widget"
-msgstr ""
+msgstr "إظهار أيقونة الطقس في أداة سطح المكتب"
 
 #: ui/config/ConfigFullView.qml:77
 msgid "Temperature size:"
-msgstr ""
+msgstr "حجم درجة الحرارة:"
 
 #: ui/config/ConfigFullView.qml:87
 msgid "Temperature text size in desktop mode"
-msgstr ""
+msgstr "حجم نص درجة الحرارة في وضع سطح المكتب"
 
 #: ui/config/ConfigFullView.qml:92
 msgid "Show temperature"
-msgstr ""
+msgstr "إظهار درجة الحرارة"
 
 #: ui/config/ConfigFullView.qml:95
 msgid "Display temperature in desktop widget"
-msgstr ""
+msgstr "إظهار درجة الحرارة في أداة سطح المكتب"
 
 #: ui/config/ConfigFullView.qml:100
 msgid "Bold temperature text"
-msgstr ""
+msgstr "نص درجة الحرارة عريض"
 
 #: ui/config/ConfigFullView.qml:113
 msgid "Weather condition size:"
-msgstr ""
+msgstr "حجم وصف الطقس:"
 
 #: ui/config/ConfigFullView.qml:123
 msgid "Weather condition text size (e.g., 'Partly cloudy')"
-msgstr ""
+msgstr "حجم نص وصف الطقس (مثل «غائم جزئيًا»)"
 
 #: ui/config/ConfigFullView.qml:128
 msgid "Show weather condition"
-msgstr ""
+msgstr "إظهار حالة الطقس"
 
 #: ui/config/ConfigFullView.qml:131
 msgid "Display weather condition description"
-msgstr ""
+msgstr "إظهار وصف حالة الطقس"
 
 #: ui/config/ConfigFullView.qml:142
 msgid ""
 "These settings apply to the desktop widget view only. For panel/compact "
 "view, use the 'Compact View' tab."
 msgstr ""
+"تنطبق هذه الإعدادات على عرض أداة سطح المكتب فقط. لعرض اللوحة أو العرض "
+"المدمج، استخدم علامة تبويب «العرض المدمج»."
 
 #: ui/config/ConfigGeneral.qml:29
 msgid "System"
-msgstr ""
+msgstr "النظام"
 
 #: ui/config/ConfigGeneral.qml:53
 msgid "Language:"
-msgstr ""
+msgstr "اللغة:"
 
 #: ui/config/ConfigGeneral.qml:72
 msgid "Location:"
-msgstr ""
+msgstr "الموقع:"
 
 #: ui/config/ConfigGeneral.qml:73
 msgid "Detect automatically"
-msgstr ""
+msgstr "الكشف تلقائيًا"
 
 #: ui/config/ConfigGeneral.qml:76
 msgid "Use wttr.in IP-based location detection"
-msgstr ""
+msgstr "استخدام wttr.in لتحديد الموقع اعتمادًا على عنوان IP"
 
 #: ui/config/ConfigGeneral.qml:80
 msgid "Manual location:"
-msgstr ""
+msgstr "الموقع اليدوي:"
 
 #: ui/config/ConfigGeneral.qml:87
 msgid "City name, ZIP code, or coordinates"
-msgstr ""
+msgstr "اسم المدينة أو الرمز البريدي أو الإحداثيات"
 
 #: ui/config/ConfigGeneral.qml:90
 msgid ""
 "Enter city name (e.g., 'London'), ZIP code (e.g., '10001'), or coordinates "
 "(e.g., '51.5074,-0.1278')"
 msgstr ""
+"أدخل اسم المدينة (مثل «لندن») أو الرمز البريدي (مثل «10001») أو الإحداثيات "
+"(مثل «51.5074,-0.1278»)"
 
 #: ui/config/ConfigGeneral.qml:101
 msgid "Temperature unit:"
-msgstr ""
+msgstr "وحدة درجة الحرارة:"
 
 #: ui/config/ConfigGeneral.qml:105
 msgid "Choose between Celsius and Fahrenheit"
-msgstr ""
+msgstr "اختر بين الدرجة المئوية والفهرنهايت"
 
 #: ui/config/ConfigGeneral.qml:111
 msgid "Update interval (minutes):"
-msgstr ""
+msgstr "فاصل التحديث (بالدقائق):"
 
 #: ui/config/ConfigGeneral.qml:117
 msgid "How often to refresh weather data (5-120 minutes)"
-msgstr ""
+msgstr "معدل تحديث بيانات الطقس (5–120 دقيقة)"
 
 #: ui/config/ConfigGeneral.qml:127
 msgid "Display:"
-msgstr ""
+msgstr "العرض:"
 
 #: ui/config/ConfigGeneral.qml:128
 msgid "Show widget background"
-msgstr ""
+msgstr "إظهار خلفية الأداة"
 
 #: ui/config/ConfigGeneral.qml:131
 msgid "Show/hide the widget background panel"
-msgstr ""
+msgstr "إظهار أو إخفاء لوحة خلفية الأداة"
 
 #: ui/config/ConfigGeneral.qml:136
 msgid "Use compact mode"
-msgstr ""
+msgstr "استخدام الوضع المدمج"
 
 #: ui/config/ConfigGeneral.qml:139
 msgid "Use compact view as default (recommended for panel)"
-msgstr ""
+msgstr "استخدام العرض المدمج افتراضيًا (موصى به للوحة)"
 
 #: ui/config/ConfigGeneral.qml:150
 msgid "Weather data provided by wttr.in"
-msgstr ""
+msgstr "بيانات الطقس مقدمة من wttr.in"
 
 #: ui/main.qml:101
 msgid "%1 · %2%"
-msgstr ""
+msgstr "%1 · %2%"
 
 #: ui/main.qml:106 ui/main.qml:136 ui/main.qml:769
 msgid "Updating..."
-msgstr ""
+msgstr "جارٍ التحديث…"
 
 #: ui/main.qml:113
 msgid "Feels like %1"
-msgstr ""
+msgstr "المحسوسة %1"
 
 #: ui/main.qml:117 ui/main.qml:369
 msgid "H %1 / L %2"
-msgstr ""
+msgstr "العظمى %1 / الصغرى %2"
 
 #: ui/main.qml:127 ui/main.qml:140
 msgid "Update failed · Last update: %1"
-msgstr ""
+msgstr "فشل التحديث · آخر تحديث: %1"
 
 #: ui/main.qml:128 ui/main.qml:141 ui/main.qml:772
 msgid "Update failed"
-msgstr ""
+msgstr "فشل التحديث"
 
 #: ui/main.qml:143
 msgid "Last update: %1"
-msgstr ""
+msgstr "آخر تحديث: %1"
 
 #: ui/main.qml:146
 msgid "Weather"
-msgstr ""
+msgstr "الطقس"
 
 #: ui/main.qml:205 ui/main.qml:680
 msgid "Current location"
-msgstr ""
+msgstr "الموقع الحالي"
 
 #: ui/main.qml:300
 msgid "No location set"
-msgstr ""
+msgstr "لم يتم تحديد موقع"
 
 #: ui/main.qml:312
 msgid "Refresh weather"
-msgstr ""
+msgstr "تحديث الطقس"
 
 #: ui/main.qml:400
 msgid "Next %1 hour"
 msgid_plural "Next %1 hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "الآن"
+msgstr[1] "الساعة القادمة"
+msgstr[2] "الساعتان القادمتان"
+msgstr[3] "%1 ساعات قادمة"
+msgstr[4] "%1 ساعة قادمة"
+msgstr[5] "%1 ساعة قادمة"
 
 #: ui/main.qml:473 ui/main.qml:585
 #, javascript-format
 msgid "%1%"
-msgstr ""
+msgstr "%1%"
 
 #: ui/main.qml:488 ui/main.qml:600
 msgid "Forecast unavailable"
-msgstr ""
+msgstr "التوقعات غير متاحة"
 
 #: ui/main.qml:489 ui/main.qml:601
 msgid "Loading forecast..."
-msgstr ""
+msgstr "جارٍ تحميل التوقعات…"
 
 #: ui/main.qml:506
 msgid "%1-day forecast"
-msgstr ""
+msgstr "توقعات %1 أيام"
 
 #: ui/main.qml:577
 msgid "%1° / %2°"
-msgstr ""
+msgstr "%1° / %2°"
 
 #: ui/main.qml:744
 msgid "Today"
-msgstr ""
+msgstr "اليوم"
 
 #: ui/main.qml:1054
 msgid "Rain"
-msgstr ""
+msgstr "مطر"
 
 #: ui/main.qml:1055
 msgid "Snow"
-msgstr ""
+msgstr "ثلج"
 
 #: ui/main.qml:1055
 msgid "Thunder"
-msgstr ""
+msgstr "عواصف رعدية"

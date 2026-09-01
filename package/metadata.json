@@ -18,6 +18,10 @@
         "Id": "pp.ua.xxanqw.justweather",
         "License": "GPL-3.0+",
         "Name": "JustWeather",
+        "Name[ar]": "الطقس فقط",
+        "Name[es]": "Solo el tiempo",
+        "Name[fr]": "Simplement la météo",
+        "Name[uk]": "Просто погода",
         "Name[zh_CN]": "极简天气",
         "Version": "1.2.0",
         "Website": "https://github.com/xxanqw/justweather"
