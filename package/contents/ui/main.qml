@@ -244,6 +244,17 @@ PlasmoidItem {
                         Layout.topMargin: Kirigami.Units.largeSpacing
                         visible: plasmoid.configuration.showCondition
                     }
+
+                    PlasmaComponents.Label {
+                        text: i18n("H %1 / L %2",
+                                   root.currentTodayMax() + root.temperatureSuffix(),
+                                   root.currentTodayMin() + root.temperatureSuffix())
+                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                        opacity: 0.6
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.topMargin: Kirigami.Units.smallSpacing
+                        visible: root.currentTodayMax() !== "..." && root.currentTodayMin() !== "..."
+                    }
                 }
             }
 
