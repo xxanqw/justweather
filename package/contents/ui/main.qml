@@ -27,6 +27,15 @@ PlasmoidItem {
     property bool loading: false
     property bool updateFailed: false
     property string lastUpdate: ""
+    property bool forecastEnabled: plasmoid.configuration.showHourlyForecast
+                                   || plasmoid.configuration.showDailyForecast
+    property bool forecastLoading: false
+    property bool forecastFailed: false
+    property real forecastLatitude: 0
+    property real forecastLongitude: 0
+    property bool hasForecastCoordinates: false
+    property var hourlyForecast: []
+    property var dailyForecast: []
 
     // Helper to get icon path
     function getIconPath(iconName) {
@@ -170,6 +179,12 @@ PlasmoidItem {
     onAutoLocationChanged: {
         displayLocation = autoLocation ? i18n("Current location") : location
         fetchWeather()
+    }
+
+    onForecastEnabledChanged: {
+        if (forecastEnabled && hasForecastCoordinates) {
+            fetchForecast()
+        }
     }
 
     // Compact representation (for panel)
@@ -389,6 +404,90 @@ PlasmoidItem {
         return i18n("Current location")
     }
 
+    function resolveForecastCoordinates(data) {
+        if (!data || !data.nearest_area || data.nearest_area.length === 0) {
+            return null
+        }
+
+        var area = data.nearest_area[0]
+        var latitude = parseFloat(area.latitude)
+        var longitude = parseFloat(area.longitude)
+
+        if (isNaN(latitude) || isNaN(longitude)) {
+            return null
+        }
+
+        return {
+            "latitude": latitude,
+            "longitude": longitude
+        }
+    }
+
+    function celsiusToFahrenheit(value) {
+        return value * 9 / 5 + 32
+    }
+
+    function forecastTemperature(value) {
+        if (value === undefined || value === null || isNaN(value)) {
+            return "..."
+        }
+
+        var converted = plasmoid.configuration.temperatureUnit === 0
+            ? value
+            : celsiusToFahrenheit(value)
+        return Math.round(converted).toString()
+    }
+
+    function forecastDate(value) {
+        if (!value) {
+            return null
+        }
+
+        var dateAndTime = value.split("T")
+        var dateParts = dateAndTime[0].split("-")
+        var timeParts = dateAndTime.length > 1 ? dateAndTime[1].split(":") : ["12", "0"]
+
+        if (dateParts.length !== 3) {
+            return null
+        }
+
+        return new Date(parseInt(dateParts[0]),
+                        parseInt(dateParts[1]) - 1,
+                        parseInt(dateParts[2]),
+                        parseInt(timeParts[0]),
+                        parseInt(timeParts[1]))
+    }
+
+    function formatForecastTime(value) {
+        var date = forecastDate(value)
+        return date ? date.toLocaleTimeString(Qt.locale(), Locale.ShortFormat) : value
+    }
+
+    function formatForecastDay(value, index) {
+        if (index === 0 && plasmoid.configuration.forecastIncludesToday) {
+            return i18n("Today")
+        }
+
+        var date = forecastDate(value)
+        return date ? date.toLocaleDateString(Qt.locale(), "ddd") : value
+    }
+
+    function visibleHourlyForecast() {
+        var result = []
+        var horizon = Math.min(plasmoid.configuration.hourlyForecastHours, hourlyForecast.length)
+        var step = Math.max(1, plasmoid.configuration.hourlyForecastStep)
+
+        for (var i = 0; i < horizon; i += step) {
+            result.push(hourlyForecast[i])
+        }
+        return result
+    }
+
+    function visibleDailyForecast() {
+        var start = plasmoid.configuration.forecastIncludesToday ? 0 : 1
+        return dailyForecast.slice(start, start + plasmoid.configuration.forecastDays)
+    }
+
     // Function to fetch weather from wttr.in
     function fetchWeather() {
         if (!autoLocation && !location) {
@@ -433,6 +532,7 @@ PlasmoidItem {
 
         var current = data.current_condition[0]
         var today = data.weather && data.weather.length > 0 ? data.weather[0] : null
+        var coordinates = resolveForecastCoordinates(data)
 
         displayLocation = resolveLocationName(data)
         temperatureC = current.temp_C
@@ -453,11 +553,113 @@ PlasmoidItem {
         // Map weather condition to icon using the selected location's local time.
         iconName = mapWeatherToIcon(current.weatherCode, isNightTime(current, today))
 
+        if (coordinates) {
+            forecastLatitude = coordinates.latitude
+            forecastLongitude = coordinates.longitude
+            hasForecastCoordinates = true
+
+            if (forecastEnabled) {
+                fetchForecast()
+            }
+        } else {
+            hasForecastCoordinates = false
+            forecastFailed = forecastEnabled
+        }
+
         // Update last refresh time
         var now = new Date()
         lastUpdate = now.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
 
         console.log("Weather updated:", currentTemperature(), weatherCondition, iconName)
+        return true
+    }
+
+    function fetchForecast() {
+        if (!forecastEnabled || !hasForecastCoordinates) {
+            return
+        }
+
+        forecastLoading = true
+
+        var xhr = new XMLHttpRequest()
+        var hourlyFields = "temperature_2m,apparent_temperature,precipitation_probability,weather_code,is_day"
+        var dailyFields = "weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_probability_max"
+        var url = "https://api.open-meteo.com/v1/forecast"
+            + "?latitude=" + encodeURIComponent(forecastLatitude)
+            + "&longitude=" + encodeURIComponent(forecastLongitude)
+            + "&hourly=" + hourlyFields
+            + "&daily=" + dailyFields
+            + "&current=temperature_2m"
+            + "&timezone=auto"
+            + "&forecast_days=8"
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState !== XMLHttpRequest.DONE) {
+                return
+            }
+
+            forecastLoading = false
+            if (xhr.status === 200) {
+                try {
+                    forecastFailed = !parseForecastData(JSON.parse(xhr.responseText))
+                } catch (e) {
+                    console.error("Error parsing forecast data:", e)
+                    forecastFailed = true
+                }
+            } else {
+                console.error("Error fetching forecast:", xhr.status)
+                forecastFailed = true
+            }
+        }
+
+        xhr.open("GET", url)
+        xhr.send()
+    }
+
+    function parseForecastData(data) {
+        if (!data || !data.hourly || !data.daily
+                || !data.hourly.time || !data.daily.time) {
+            console.error("Invalid forecast data structure")
+            return false
+        }
+
+        var hours = []
+        var currentTime = data.current && data.current.time ? data.current.time : ""
+        var firstHour = 0
+
+        while (firstHour < data.hourly.time.length
+                && currentTime
+                && data.hourly.time[firstHour] < currentTime) {
+            firstHour++
+        }
+
+        var lastHour = Math.min(firstHour + 24, data.hourly.time.length)
+        for (var i = firstHour; i < lastHour; i++) {
+            hours.push({
+                "time": data.hourly.time[i],
+                "temperatureC": data.hourly.temperature_2m[i],
+                "apparentTemperatureC": data.hourly.apparent_temperature[i],
+                "precipitation": data.hourly.precipitation_probability[i],
+                "iconName": mapWmoToIcon(data.hourly.weather_code[i], data.hourly.is_day[i] === 0)
+            })
+        }
+
+        var days = []
+        for (var day = 0; day < data.daily.time.length; day++) {
+            days.push({
+                "date": data.daily.time[day],
+                "maxC": data.daily.temperature_2m_max[day],
+                "minC": data.daily.temperature_2m_min[day],
+                "apparentMaxC": data.daily.apparent_temperature_max[day],
+                "apparentMinC": data.daily.apparent_temperature_min[day],
+                "precipitation": data.daily.precipitation_probability_max[day],
+                "iconName": mapWmoToIcon(data.daily.weather_code[day], false)
+            })
+        }
+
+        hourlyForecast = hours
+        dailyForecast = days
+        console.log("Forecast updated:", hours.length, "hours,", days.length, "days")
         return true
     }
 
@@ -595,5 +797,40 @@ PlasmoidItem {
 
         console.log("Weather code:", code, "-> Icon:", iconPath)
         return iconPath
+    }
+
+    // Map Open-Meteo WMO weather codes to the bundled icon set.
+    function mapWmoToIcon(code, isNight) {
+        var codeInt = parseInt(code)
+        var daySuffix = isNight ? "-night" : "-day"
+
+        if (codeInt === 0) {
+            return isNight ? "clear-night" : "clear-day"
+        }
+        if (codeInt === 1 || codeInt === 2) {
+            return "partly-cloudy" + daySuffix
+        }
+        if (codeInt === 3) {
+            return "overcast" + daySuffix
+        }
+        if (codeInt === 45 || codeInt === 48) {
+            return "fog" + daySuffix
+        }
+        if ([51, 53, 55, 56, 57].includes(codeInt)) {
+            return "drizzle"
+        }
+        if ([61, 63, 65, 80, 81, 82].includes(codeInt)) {
+            return "rain"
+        }
+        if ([66, 67].includes(codeInt)) {
+            return "sleet"
+        }
+        if ([71, 73, 75, 77, 85, 86].includes(codeInt)) {
+            return "snow"
+        }
+        if ([95, 96, 99].includes(codeInt)) {
+            return "thunderstorms" + daySuffix
+        }
+        return "not-available"
     }
 }
