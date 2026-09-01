@@ -8,6 +8,9 @@ import org.kde.kirigami as Kirigami
 PlasmoidItem {
     id: root
 
+    property int language: plasmoid.configuration.language
+    property bool initialized: false
+
     // Properties for weather data
     property string temperatureC: "..."
     property string temperatureF: "..."
@@ -37,6 +40,26 @@ PlasmoidItem {
     property bool hasForecastCoordinates: false
     property var hourlyForecast: []
     property var dailyForecast: []
+
+    function i18n(message, arg1, arg2, arg3) {
+        return localization.text(message, arg1, arg2, arg3)
+    }
+
+    function i18np(singular, plural, count) {
+        return localization.plural(singular, plural, count)
+    }
+
+    function currentLocale() {
+        return Qt.locale(localization.localeName)
+    }
+
+    LayoutMirroring.enabled: localization.rightToLeft
+    LayoutMirroring.childrenInherit: true
+
+    Localization {
+        id: localization
+        language: root.language
+    }
 
     // Helper to get icon path
     function getIconPath(iconName) {
@@ -156,6 +179,7 @@ PlasmoidItem {
 
     // Fetch weather on load
     Component.onCompleted: {
+        initialized = true
         fetchWeather()
 
         // Set initial mode based on form factor
@@ -180,6 +204,12 @@ PlasmoidItem {
     onAutoLocationChanged: {
         displayLocation = autoLocation ? i18n("Current location") : location
         fetchWeather()
+    }
+
+    onLanguageChanged: {
+        if (initialized) {
+            fetchWeather()
+        }
     }
 
     onForecastEnabledChanged: {
@@ -587,8 +617,16 @@ PlasmoidItem {
 
     // Map Qt system locale to wttr.in language code
     function getWttrLang() {
+        if (language !== 0) {
+            return localization.languageCode
+        }
+
         var locale = Qt.locale().name  // e.g., "zh_CN"
         var lang = locale.toLowerCase().replace("_", "-")  // "zh-cn"
+
+        if (lang === "ru" || lang.indexOf("ru-") === 0) {
+            return "uk"
+        }
 
         var supportedLangs = [
             "af","am","ar","az","ba","be","bg","bn","bs","by","ca","crk","cs","cy",
@@ -698,7 +736,7 @@ PlasmoidItem {
 
     function formatForecastTime(value) {
         var date = forecastDate(value)
-        return date ? date.toLocaleTimeString(Qt.locale(), Locale.ShortFormat) : value
+        return date ? date.toLocaleTimeString(currentLocale(), Locale.ShortFormat) : value
     }
 
     function formatForecastDay(value, index) {
@@ -707,7 +745,7 @@ PlasmoidItem {
         }
 
         var date = forecastDate(value)
-        return date ? date.toLocaleDateString(Qt.locale(), "ddd") : value
+        return date ? date.toLocaleDateString(currentLocale(), "ddd") : value
     }
 
     function visibleHourlyForecast() {
@@ -858,7 +896,7 @@ PlasmoidItem {
 
         // Update last refresh time
         var now = new Date()
-        lastUpdate = now.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
+        lastUpdate = now.toLocaleTimeString(currentLocale(), Locale.ShortFormat)
 
         console.log("Weather updated:", currentTemperature(), weatherCondition, iconName)
         return true

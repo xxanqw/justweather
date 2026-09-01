@@ -3,8 +3,11 @@ import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kcmutils as KCM
 import org.kde.kirigami as Kirigami
+import ".." as JustWeather
 
 KCM.SimpleKCM {
+    id: root
+
     property alias cfg_showHourlyForecast: showHourlyForecastCheck.checked
     property alias cfg_hourlyForecastHours: hourlyForecastHoursSpinBox.value
     property alias cfg_hourlyForecastStep: hourlyForecastStepSpinBox.value
@@ -17,6 +20,22 @@ KCM.SimpleKCM {
     property alias cfg_dailyTemperatureMode: dailyTemperatureModeCombo.currentIndex
     property alias cfg_showDailyIcons: showDailyIconsCheck.checked
     property alias cfg_showDailyPrecipitation: showDailyPrecipitationCheck.checked
+
+    function i18n(message, arg1, arg2, arg3) {
+        return localization.text(message, arg1, arg2, arg3)
+    }
+
+    function i18np(singular, plural, count) {
+        return localization.plural(singular, plural, count)
+    }
+
+    LayoutMirroring.enabled: localization.rightToLeft
+    LayoutMirroring.childrenInherit: true
+
+    JustWeather.Localization {
+        id: localization
+        language: plasmoid.configuration.language
+    }
 
     Kirigami.FormLayout {
         Layout.fillWidth: true

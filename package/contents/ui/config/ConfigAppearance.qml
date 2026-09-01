@@ -3,8 +3,11 @@ import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kcmutils as KCM
 import org.kde.kirigami as Kirigami
+import ".." as JustWeather
 
 KCM.SimpleKCM {
+    id: root
+
     property alias cfg_iconStyle: iconStyleCombo.currentIndex
     property alias cfg_iconSize: iconSizeSpinBox.value
     property alias cfg_showIcon: showIconCheck.checked
@@ -12,6 +15,18 @@ KCM.SimpleKCM {
     property alias cfg_compactTemperatureMode: compactTemperatureModeCombo.currentIndex
     property alias cfg_fontSize: fontSizeSpinBox.value
     property alias cfg_boldFont: boldFontCheck.checked
+
+    function i18n(message, arg1, arg2, arg3) {
+        return localization.text(message, arg1, arg2, arg3)
+    }
+
+    LayoutMirroring.enabled: localization.rightToLeft
+    LayoutMirroring.childrenInherit: true
+
+    JustWeather.Localization {
+        id: localization
+        language: plasmoid.configuration.language
+    }
 
     Kirigami.FormLayout {
         Layout.fillWidth: true

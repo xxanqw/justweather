@@ -6,6 +6,9 @@
   <kcfgfile name=""/>
 
   <group name="General">
+    <entry name="language" type="Int">
+      <default>0</default>
+    </entry>
     <entry name="location" type="String">
       <default>Kyiv</default>
     </entry>
