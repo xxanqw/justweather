@@ -18,6 +18,8 @@ PlasmoidItem {
     property string todayMaxC: "..."
     property string todayMaxF: "..."
     property string weatherCondition: "..."
+    property string precipitationLabel: ""
+    property int precipitationChance: 0
     property string location: plasmoid.configuration.location
     property bool autoLocation: plasmoid.configuration.autoLocation
     property string displayLocation: location
@@ -59,6 +61,13 @@ PlasmoidItem {
         return plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F"
     }
 
+    function precipitationText() {
+        if (precipitationChance < 30 || !precipitationLabel) {
+            return ""
+        }
+        return i18n("%1 · %2%", precipitationLabel, precipitationChance)
+    }
+
     function weatherDetailsText() {
         if (temperatureC === "...") {
             return loading ? i18n("Updating...") : weatherCondition
@@ -73,6 +82,11 @@ PlasmoidItem {
 
         if (currentTodayMax() !== "..." && currentTodayMin() !== "...") {
             details += "\n" + i18n("H %1 / L %2", currentTodayMax() + suffix, currentTodayMin() + suffix)
+        }
+
+        var precipitation = precipitationText()
+        if (precipitation) {
+            details += "\n" + precipitation
         }
 
         if (updateFailed) {
@@ -296,6 +310,15 @@ PlasmoidItem {
                         Layout.topMargin: Kirigami.Units.smallSpacing
                         visible: root.currentTodayMax() !== "..." && root.currentTodayMin() !== "..."
                     }
+
+                    PlasmaComponents.Label {
+                        text: root.precipitationText()
+                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                        opacity: 0.7
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.topMargin: Kirigami.Units.smallSpacing
+                        visible: text !== ""
+                    }
                 }
             }
 
@@ -424,6 +447,7 @@ PlasmoidItem {
             todayMaxF = today.maxtempF || "..."
         }
 
+        updatePrecipitationForecast(current, today)
         weatherCondition = getLocalizedWeatherDesc(current)
 
         // Map weather condition to icon using the selected location's local time.
@@ -458,6 +482,49 @@ PlasmoidItem {
         }
 
         return hour * 60 + minute
+    }
+
+    function forecastSlotMinutes(value) {
+        var time = parseInt(value)
+        if (isNaN(time)) {
+            return -1
+        }
+        return Math.floor(time / 100) * 60 + (time % 100)
+    }
+
+    function updatePrecipitationForecast(current, today) {
+        precipitationLabel = ""
+        precipitationChance = 0
+
+        if (!today || !today.hourly || today.hourly.length === 0) {
+            return
+        }
+
+        var localMinutes = current ? parseClockMinutes(current.localObsDateTime) : -1
+        var checked = 0
+
+        for (var i = 0; i < today.hourly.length && checked < 3; i++) {
+            var hour = today.hourly[i]
+            var slotMinutes = forecastSlotMinutes(hour.time)
+
+            if (localMinutes >= 0 && slotMinutes >= 0 && slotMinutes < localMinutes) {
+                continue
+            }
+
+            var rain = parseInt(hour.chanceofrain || 0)
+            var snow = parseInt(hour.chanceofsnow || 0)
+            var thunder = parseInt(hour.chanceofthunder || 0)
+            var chance = Math.max(rain, snow, thunder)
+            var label = rain >= snow && rain >= thunder
+                ? i18n("Rain")
+                : (snow >= thunder ? i18n("Snow") : i18n("Thunder"))
+
+            if (chance > precipitationChance) {
+                precipitationChance = chance
+                precipitationLabel = label
+            }
+            checked++
+        }
     }
 
     // Check day/night against sunrise and sunset at the selected location.
