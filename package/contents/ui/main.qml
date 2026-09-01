@@ -31,6 +31,7 @@ PlasmoidItem {
                                    || plasmoid.configuration.showDailyForecast
     property bool forecastLoading: false
     property bool forecastFailed: false
+    property int forecastRequestId: 0
     property real forecastLatitude: 0
     property real forecastLongitude: 0
     property bool hasForecastCoordinates: false
@@ -184,6 +185,10 @@ PlasmoidItem {
     onForecastEnabledChanged: {
         if (forecastEnabled && hasForecastCoordinates) {
             fetchForecast()
+        } else if (!forecastEnabled) {
+            forecastRequestId++
+            forecastLoading = false
+            forecastFailed = false
         }
     }
 
@@ -232,8 +237,12 @@ PlasmoidItem {
     fullRepresentation: Item {
         Layout.minimumWidth: Kirigami.Units.gridUnit * 10
         Layout.minimumHeight: Kirigami.Units.gridUnit * 14
-        Layout.preferredWidth: Kirigami.Units.gridUnit * 12
-        Layout.preferredHeight: Kirigami.Units.gridUnit * 16
+        Layout.preferredWidth: Kirigami.Units.gridUnit
+                               * (root.forecastEnabled ? 22 : 12)
+        Layout.preferredHeight: Kirigami.Units.gridUnit
+                                * (plasmoid.configuration.showHourlyForecast
+                                   && plasmoid.configuration.showDailyForecast ? 28
+                                   : (root.forecastEnabled ? 22 : 16))
 
         ColumnLayout {
             anchors.fill: parent
@@ -333,6 +342,218 @@ PlasmoidItem {
                         Layout.alignment: Qt.AlignHCenter
                         Layout.topMargin: Kirigami.Units.smallSpacing
                         visible: text !== ""
+                    }
+                }
+            }
+
+            // Optional hourly weather changes
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: Kirigami.Units.smallSpacing
+                visible: plasmoid.configuration.showHourlyForecast
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    PlasmaComponents.Label {
+                        text: i18np("Next %1 hour", "Next %1 hours",
+                                    plasmoid.configuration.hourlyForecastHours)
+                        font.bold: true
+                        Layout.fillWidth: true
+                    }
+
+                    PlasmaComponents.Label {
+                        text: root.forecastStatusText()
+                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                        opacity: 0.6
+                        visible: text !== ""
+                    }
+                }
+
+                Kirigami.Separator {
+                    Layout.fillWidth: true
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: Kirigami.Units.gridUnit * 5
+                    clip: true
+
+                    Flickable {
+                        anchors.fill: parent
+                        contentWidth: hourlyForecastLayout.implicitWidth
+                        contentHeight: height
+                        flickableDirection: Flickable.HorizontalFlick
+                        boundsBehavior: Flickable.StopAtBounds
+
+                        RowLayout {
+                            id: hourlyForecastLayout
+                            height: parent.height
+                            spacing: Kirigami.Units.largeSpacing
+
+                            Repeater {
+                                model: root.visibleHourlyForecast()
+
+                                delegate: ColumnLayout {
+                                    required property var modelData
+
+                                    Layout.minimumWidth: Kirigami.Units.gridUnit * 3
+                                    Layout.alignment: Qt.AlignTop
+                                    spacing: Kirigami.Units.smallSpacing
+
+                                    PlasmaComponents.Label {
+                                        text: root.formatForecastTime(modelData.time)
+                                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                                        opacity: 0.7
+                                        Layout.alignment: Qt.AlignHCenter
+                                    }
+
+                                    Kirigami.Icon {
+                                        source: root.getIconPath(modelData.iconName)
+                                        Layout.preferredWidth: Kirigami.Units.iconSizes.medium
+                                        Layout.preferredHeight: Kirigami.Units.iconSizes.medium
+                                        Layout.alignment: Qt.AlignHCenter
+                                        visible: plasmoid.configuration.showHourlyIcons
+                                    }
+
+                                    PlasmaComponents.Label {
+                                        text: root.forecastTemperature(
+                                                  plasmoid.configuration.hourlyTemperatureMode === 1
+                                                  ? modelData.apparentTemperatureC
+                                                  : modelData.temperatureC) + "°"
+                                        font.bold: true
+                                        Layout.alignment: Qt.AlignHCenter
+                                    }
+
+                                    PlasmaComponents.Label {
+                                        text: i18n("%1%", Math.round(modelData.precipitation))
+                                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                                        opacity: 0.6
+                                        Layout.alignment: Qt.AlignHCenter
+                                        visible: plasmoid.configuration.showHourlyPrecipitation
+                                                 && modelData.precipitation !== null
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    PlasmaComponents.Label {
+                        anchors.centerIn: parent
+                        text: root.forecastFailed
+                              ? i18n("Forecast unavailable")
+                              : i18n("Loading forecast...")
+                        opacity: 0.6
+                        visible: root.hourlyForecast.length === 0
+                    }
+                }
+            }
+
+            // Optional multi-day forecast
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: Kirigami.Units.smallSpacing
+                visible: plasmoid.configuration.showDailyForecast
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    PlasmaComponents.Label {
+                        text: i18n("%1-day forecast", plasmoid.configuration.forecastDays)
+                        font.bold: true
+                        Layout.fillWidth: true
+                    }
+
+                    PlasmaComponents.Label {
+                        text: root.forecastStatusText()
+                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                        opacity: 0.6
+                        visible: text !== ""
+                    }
+                }
+
+                Kirigami.Separator {
+                    Layout.fillWidth: true
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: Kirigami.Units.gridUnit * 5
+                    clip: true
+
+                    Flickable {
+                        anchors.fill: parent
+                        contentWidth: dailyForecastLayout.implicitWidth
+                        contentHeight: height
+                        flickableDirection: Flickable.HorizontalFlick
+                        boundsBehavior: Flickable.StopAtBounds
+
+                        RowLayout {
+                            id: dailyForecastLayout
+                            height: parent.height
+                            spacing: Kirigami.Units.largeSpacing
+
+                            Repeater {
+                                model: root.visibleDailyForecast()
+
+                                delegate: ColumnLayout {
+                                    required property var modelData
+                                    required property int index
+
+                                    Layout.minimumWidth: Kirigami.Units.gridUnit * 3
+                                    Layout.alignment: Qt.AlignTop
+                                    spacing: Kirigami.Units.smallSpacing
+
+                                    PlasmaComponents.Label {
+                                        text: root.formatForecastDay(modelData.date, index)
+                                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                                        opacity: 0.7
+                                        Layout.alignment: Qt.AlignHCenter
+                                    }
+
+                                    Kirigami.Icon {
+                                        source: root.getIconPath(modelData.iconName)
+                                        Layout.preferredWidth: Kirigami.Units.iconSizes.medium
+                                        Layout.preferredHeight: Kirigami.Units.iconSizes.medium
+                                        Layout.alignment: Qt.AlignHCenter
+                                        visible: plasmoid.configuration.showDailyIcons
+                                    }
+
+                                    PlasmaComponents.Label {
+                                        property real maximum: plasmoid.configuration.dailyTemperatureMode === 1
+                                                               ? modelData.apparentMaxC
+                                                               : modelData.maxC
+                                        property real minimum: plasmoid.configuration.dailyTemperatureMode === 1
+                                                               ? modelData.apparentMinC
+                                                               : modelData.minC
+
+                                        text: i18n("%1° / %2°",
+                                                   root.forecastTemperature(maximum),
+                                                   root.forecastTemperature(minimum))
+                                        font.bold: true
+                                        Layout.alignment: Qt.AlignHCenter
+                                    }
+
+                                    PlasmaComponents.Label {
+                                        text: i18n("%1%", Math.round(modelData.precipitation))
+                                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                                        opacity: 0.6
+                                        Layout.alignment: Qt.AlignHCenter
+                                        visible: plasmoid.configuration.showDailyPrecipitation
+                                                 && modelData.precipitation !== null
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    PlasmaComponents.Label {
+                        anchors.centerIn: parent
+                        text: root.forecastFailed
+                              ? i18n("Forecast unavailable")
+                              : i18n("Loading forecast...")
+                        opacity: 0.6
+                        visible: root.dailyForecast.length === 0
                     }
                 }
             }
@@ -488,6 +709,16 @@ PlasmoidItem {
         return dailyForecast.slice(start, start + plasmoid.configuration.forecastDays)
     }
 
+    function forecastStatusText() {
+        if (forecastLoading) {
+            return i18n("Updating...")
+        }
+        if (forecastFailed) {
+            return i18n("Update failed")
+        }
+        return ""
+    }
+
     // Function to fetch weather from wttr.in
     function fetchWeather() {
         if (!autoLocation && !location) {
@@ -580,6 +811,7 @@ PlasmoidItem {
         }
 
         forecastLoading = true
+        var requestId = ++forecastRequestId
 
         var xhr = new XMLHttpRequest()
         var hourlyFields = "temperature_2m,apparent_temperature,precipitation_probability,weather_code,is_day"
@@ -595,6 +827,10 @@ PlasmoidItem {
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState !== XMLHttpRequest.DONE) {
+                return
+            }
+
+            if (requestId !== forecastRequestId) {
                 return
             }
 

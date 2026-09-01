@@ -120,7 +120,7 @@ KCM.SimpleKCM {
 
         QQC2.Label {
             Layout.fillWidth: true
-            text: i18n("Forecast sections appear only in the expanded and desktop views. They are disabled by default to preserve the minimal layout.")
+            text: i18n("Forecast sections appear only in the expanded and desktop views. They are disabled by default to preserve the minimal layout. Forecast data provided by Open-Meteo.")
             font.pointSize: Kirigami.Theme.smallFont.pointSize
             opacity: 0.6
             wrapMode: Text.WordWrap
