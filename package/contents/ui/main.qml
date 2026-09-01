@@ -110,8 +110,8 @@ PlasmoidItem {
         return i18n("Last update: %1", lastUpdate)
     }
 
-    Plasmoid.toolTipMainText: displayLocation || i18n("Weather")
-    Plasmoid.toolTipSubText: weatherDetailsText()
+    toolTipMainText: displayLocation || i18n("Weather")
+    toolTipSubText: weatherDetailsText()
 
     // Widget size preferences
     preferredRepresentation: plasmoid.configuration.compactMode ? compactRepresentation : fullRepresentation
