@@ -6,6 +6,7 @@ import org.kde.kirigami as Kirigami
 
 KCM.SimpleKCM {
     property alias cfg_location: locationField.text
+    property alias cfg_autoLocation: autoLocationCheck.checked
     property alias cfg_temperatureUnit: tempUnitCombo.currentIndex
     property alias cfg_updateInterval: updateIntervalSpinBox.value
     property alias cfg_showBackground: showBackgroundCheck.checked
@@ -14,16 +15,25 @@ KCM.SimpleKCM {
     Kirigami.FormLayout {
         Layout.fillWidth: true
 
-        // Location settings
-        RowLayout {
+        QQC2.CheckBox {
+            id: autoLocationCheck
             Kirigami.FormData.label: i18n("Location:")
+            text: i18n("Detect automatically")
+
+            QQC2.ToolTip.visible: hovered
+            QQC2.ToolTip.text: i18n("Use wttr.in IP-based location detection")
+        }
+
+        RowLayout {
+            Kirigami.FormData.label: i18n("Manual location:")
             Layout.fillWidth: true
 
             QQC2.TextField {
                 id: locationField
                 Layout.fillWidth: true
+                enabled: !autoLocationCheck.checked
                 placeholderText: i18n("City name, ZIP code, or coordinates")
-                
+
                 QQC2.ToolTip.visible: hovered
                 QQC2.ToolTip.text: i18n("Enter city name (e.g., 'London'), ZIP code (e.g., '10001'), or coordinates (e.g., '51.5074,-0.1278')")
             }
@@ -38,7 +48,7 @@ KCM.SimpleKCM {
             id: tempUnitCombo
             Kirigami.FormData.label: i18n("Temperature unit:")
             model: ["°C", "°F"]
-            
+
             QQC2.ToolTip.visible: hovered
             QQC2.ToolTip.text: i18n("Choose between Celsius and Fahrenheit")
         }
@@ -50,7 +60,7 @@ KCM.SimpleKCM {
             from: 5
             to: 120
             stepSize: 5
-            
+
             QQC2.ToolTip.visible: hovered
             QQC2.ToolTip.text: i18n("How often to refresh weather data (5-120 minutes)")
         }
@@ -64,7 +74,7 @@ KCM.SimpleKCM {
             id: showBackgroundCheck
             Kirigami.FormData.label: i18n("Display:")
             text: i18n("Show widget background")
-            
+
             QQC2.ToolTip.visible: hovered
             QQC2.ToolTip.text: i18n("Show/hide the widget background panel")
         }
@@ -72,7 +82,7 @@ KCM.SimpleKCM {
         QQC2.CheckBox {
             id: compactModeCheck
             text: i18n("Use compact mode")
-            
+
             QQC2.ToolTip.visible: hovered
             QQC2.ToolTip.text: i18n("Use compact view as default (recommended for panel)")
         }

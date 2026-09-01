@@ -19,6 +19,8 @@ PlasmoidItem {
     property string todayMaxF: "..."
     property string weatherCondition: "..."
     property string location: plasmoid.configuration.location
+    property bool autoLocation: plasmoid.configuration.autoLocation
+    property string displayLocation: location
     property string iconName: "not-available"
     property bool loading: false
     property bool updateFailed: false
@@ -87,7 +89,7 @@ PlasmoidItem {
         return i18n("Last update: %1", lastUpdate)
     }
 
-    Plasmoid.toolTipMainText: location || i18n("Weather")
+    Plasmoid.toolTipMainText: displayLocation || i18n("Weather")
     Plasmoid.toolTipSubText: weatherDetailsText()
 
     // Widget size preferences
@@ -138,9 +140,15 @@ PlasmoidItem {
 
     // Watch for location changes
     onLocationChanged: {
-        if (location) {
+        if (!autoLocation && location) {
+            displayLocation = location
             fetchWeather()
         }
+    }
+
+    onAutoLocationChanged: {
+        displayLocation = autoLocation ? i18n("Current location") : location
+        fetchWeather()
     }
 
     // Compact representation (for panel)
@@ -176,7 +184,7 @@ PlasmoidItem {
             }
 
             PlasmaComponents.Label {
-                text: root.currentTemperature() + (plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F")
+                text: root.currentTemperature() + root.temperatureSuffix()
                 font.pixelSize: plasmoid.configuration.fontSize
                 font.bold: plasmoid.configuration.boldFont
                 visible: plasmoid.configuration.showTemperature
@@ -208,7 +216,7 @@ PlasmoidItem {
                 }
 
                 PlasmaComponents.Label {
-                    text: root.location || i18n("No location set")
+                    text: root.displayLocation || i18n("No location set")
                     font.bold: true
                     font.pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.2
                     Layout.fillWidth: true
@@ -252,7 +260,7 @@ PlasmoidItem {
 
                         PlasmaComponents.Label {
                             id: tempLabel
-                            text: root.currentTemperature() + (plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F")
+                            text: root.currentTemperature() + root.temperatureSuffix()
                             font.pixelSize: plasmoid.configuration.fullTempSize
                             font.bold: plasmoid.configuration.fullBoldTemp
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -338,9 +346,22 @@ PlasmoidItem {
         return data && data.data ? data.data : data
     }
 
+    function resolveLocationName(data) {
+        if (!autoLocation || !data || !data.nearest_area || data.nearest_area.length === 0) {
+            return location
+        }
+
+        var area = data.nearest_area[0]
+        if (area.areaName && area.areaName.length > 0 && area.areaName[0].value) {
+            return area.areaName[0].value
+        }
+
+        return i18n("Current location")
+    }
+
     // Function to fetch weather from wttr.in
     function fetchWeather() {
-        if (!location) {
+        if (!autoLocation && !location) {
             console.log("No location set")
             return
         }
@@ -348,7 +369,8 @@ PlasmoidItem {
         loading = true
 
         var xhr = new XMLHttpRequest()
-        var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1&lang=" + getWttrLang()
+        var requestLocation = autoLocation ? "" : encodeURIComponent(location)
+        var url = "https://wttr.in/" + requestLocation + "?format=j1&lang=" + getWttrLang()
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -382,6 +404,7 @@ PlasmoidItem {
         var current = data.current_condition[0]
         var today = data.weather && data.weather.length > 0 ? data.weather[0] : null
 
+        displayLocation = resolveLocationName(data)
         temperatureC = current.temp_C
         temperatureF = current.temp_F
         feelsLikeC = current.FeelsLikeC || "..."
