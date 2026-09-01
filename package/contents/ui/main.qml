@@ -11,12 +11,18 @@ PlasmoidItem {
     // Properties for weather data
     property string temperatureC: "..."
     property string temperatureF: "..."
+    property string feelsLikeC: "..."
+    property string feelsLikeF: "..."
+    property string todayMinC: "..."
+    property string todayMinF: "..."
+    property string todayMaxC: "..."
+    property string todayMaxF: "..."
     property string weatherCondition: "..."
     property string location: plasmoid.configuration.location
     property string iconName: "not-available"
     property bool loading: false
     property string lastUpdate: ""
-    
+
     // Helper to get icon path
     function getIconPath(iconName) {
         var style = plasmoid.configuration.iconStyle === 0 ? "fill" : "line"
@@ -26,11 +32,49 @@ PlasmoidItem {
     function currentTemperature() {
         return plasmoid.configuration.temperatureUnit === 0 ? temperatureC : temperatureF
     }
-    
+
+    function currentFeelsLike() {
+        return plasmoid.configuration.temperatureUnit === 0 ? feelsLikeC : feelsLikeF
+    }
+
+    function currentTodayMin() {
+        return plasmoid.configuration.temperatureUnit === 0 ? todayMinC : todayMinF
+    }
+
+    function currentTodayMax() {
+        return plasmoid.configuration.temperatureUnit === 0 ? todayMaxC : todayMaxF
+    }
+
+    function temperatureSuffix() {
+        return plasmoid.configuration.temperatureUnit === 0 ? "°C" : "°F"
+    }
+
+    function weatherDetailsText() {
+        if (temperatureC === "...") {
+            return loading ? i18n("Updating...") : weatherCondition
+        }
+
+        var suffix = temperatureSuffix()
+        var details = weatherCondition
+
+        if (currentFeelsLike() !== "...") {
+            details += "\n" + i18n("Feels like %1", currentFeelsLike() + suffix)
+        }
+
+        if (currentTodayMax() !== "..." && currentTodayMin() !== "...") {
+            details += "\n" + i18n("H %1 / L %2", currentTodayMax() + suffix, currentTodayMin() + suffix)
+        }
+
+        return details
+    }
+
+    Plasmoid.toolTipMainText: location || i18n("Weather")
+    Plasmoid.toolTipSubText: weatherDetailsText()
+
     // Widget size preferences
     preferredRepresentation: plasmoid.configuration.compactMode ? compactRepresentation : fullRepresentation
-    
-    Plasmoid.backgroundHints: plasmoid.configuration.showBackground ? 
+
+    Plasmoid.backgroundHints: plasmoid.configuration.showBackground ?
         PlasmaCore.Types.DefaultBackground : PlasmaCore.Types.NoBackground
 
     // Timer for auto-refresh
@@ -50,7 +94,7 @@ PlasmoidItem {
             if (plasmoid.formFactor === PlasmaCore.Types.Planar) {
                 // Desktop widget - use full representation
                 plasmoid.configuration.compactMode = false
-            } else if (plasmoid.formFactor === PlasmaCore.Types.Horizontal || 
+            } else if (plasmoid.formFactor === PlasmaCore.Types.Horizontal ||
                        plasmoid.formFactor === PlasmaCore.Types.Vertical) {
                 // Panel widget - use compact representation
                 plasmoid.configuration.compactMode = true
@@ -61,12 +105,12 @@ PlasmoidItem {
     // Fetch weather on load
     Component.onCompleted: {
         fetchWeather()
-        
+
         // Set initial mode based on form factor
         if (plasmoid.formFactor === PlasmaCore.Types.Planar) {
             // Desktop widget
             plasmoid.configuration.compactMode = false
-        } else if (plasmoid.formFactor === PlasmaCore.Types.Horizontal || 
+        } else if (plasmoid.formFactor === PlasmaCore.Types.Horizontal ||
                    plasmoid.formFactor === PlasmaCore.Types.Vertical) {
             // Panel widget
             plasmoid.configuration.compactMode = true
@@ -148,7 +192,7 @@ PlasmoidItem {
                     icon.name: "view-refresh"
                     onClicked: fetchWeather()
                     enabled: !root.loading
-                    
+
                     PlasmaComponents.ToolTip {
                         text: i18n("Refresh weather")
                     }
@@ -217,7 +261,7 @@ PlasmoidItem {
     function getWttrLang() {
         var locale = Qt.locale().name  // e.g., "zh_CN"
         var lang = locale.toLowerCase().replace("_", "-")  // "zh-cn"
-        
+
         var supportedLangs = [
             "af","am","ar","az","ba","be","bg","bn","bs","by","ca","crk","cs","cy",
             "da","de","el","en","eo","es","et","eu","fa","fi","fr","fy","ga","gl",
@@ -226,7 +270,7 @@ PlasmoidItem {
             "pt-br","ro","ru","sk","sl","sr","sr-lat","sv","sw","ta","te","th","tr",
             "ts","uk","vi","zh","zh-cn","zh-tw","zu"
         ]
-        
+
         if (supportedLangs.indexOf(lang) !== -1) {
             return lang
         }
@@ -242,7 +286,7 @@ PlasmoidItem {
     function getLocalizedWeatherDesc(current) {
         var lang = getWttrLang()
         var langField = "lang_" + lang  // e.g., "lang_zh-cn"
-        
+
         if (current[langField] && current[langField][0] && current[langField][0].value) {
             var localized = current[langField][0].value
             if (localized !== "") {
@@ -261,10 +305,10 @@ PlasmoidItem {
         }
 
         loading = true
-        
+
         var xhr = new XMLHttpRequest()
         var url = "https://wttr.in/" + encodeURIComponent(location) + "?format=j1&lang=" + getWttrLang()
-        
+
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 loading = false
@@ -282,7 +326,7 @@ PlasmoidItem {
                 }
             }
         }
-        
+
         xhr.open("GET", url)
         xhr.send()
     }
@@ -295,19 +339,29 @@ PlasmoidItem {
         }
 
         var current = data.current_condition[0]
-        
+        var today = data.weather && data.weather.length > 0 ? data.weather[0] : null
+
         temperatureC = current.temp_C
         temperatureF = current.temp_F
-        
+        feelsLikeC = current.FeelsLikeC || "..."
+        feelsLikeF = current.FeelsLikeF || "..."
+
+        if (today) {
+            todayMinC = today.mintempC || "..."
+            todayMinF = today.mintempF || "..."
+            todayMaxC = today.maxtempC || "..."
+            todayMaxF = today.maxtempF || "..."
+        }
+
         weatherCondition = getLocalizedWeatherDesc(current)
 
         // Map weather condition to icon
         iconName = mapWeatherToIcon(current.weatherCode, isNightTime())
-        
+
         // Update last refresh time
         var now = new Date()
         lastUpdate = now.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
-        
+
         console.log("Weather updated:", currentTemperature(), weatherCondition, iconName)
     }
 
@@ -321,9 +375,9 @@ PlasmoidItem {
     function mapWeatherToIcon(code, isNight) {
         var codeInt = parseInt(code)
         var daySuffix = isNight ? "-night" : "-day"
-        
+
         var iconPath = ""
-        
+
         // Clear
         if (codeInt === 113) {
             iconPath = isNight ? "clear-night" : "clear-day"
@@ -364,7 +418,7 @@ PlasmoidItem {
         else {
             iconPath = "not-available"
         }
-        
+
         console.log("Weather code:", code, "-> Icon:", iconPath)
         return iconPath
     }
