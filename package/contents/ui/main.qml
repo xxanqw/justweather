@@ -21,6 +21,7 @@ PlasmoidItem {
     property string location: plasmoid.configuration.location
     property string iconName: "not-available"
     property bool loading: false
+    property bool updateFailed: false
     property string lastUpdate: ""
 
     // Helper to get icon path
@@ -65,7 +66,25 @@ PlasmoidItem {
             details += "\n" + i18n("H %1 / L %2", currentTodayMax() + suffix, currentTodayMin() + suffix)
         }
 
+        if (updateFailed) {
+            details += "\n" + (lastUpdate
+                ? i18n("Update failed · Last update: %1", lastUpdate)
+                : i18n("Update failed"))
+        }
+
         return details
+    }
+
+    function updateStatusText() {
+        if (loading) {
+            return i18n("Updating...")
+        }
+        if (updateFailed) {
+            return lastUpdate
+                ? i18n("Update failed · Last update: %1", lastUpdate)
+                : i18n("Update failed")
+        }
+        return i18n("Last update: %1", lastUpdate)
     }
 
     Plasmoid.toolTipMainText: location || i18n("Weather")
@@ -267,9 +286,9 @@ PlasmoidItem {
 
             // Last update info
             PlasmaComponents.Label {
-                text: root.loading ? i18n("Updating...") : i18n("Last update: %1", root.lastUpdate)
+                text: root.updateStatusText()
                 font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                opacity: 0.6
+                opacity: root.updateFailed ? 0.8 : 0.6
                 Layout.alignment: Qt.AlignHCenter
             }
         }
@@ -315,6 +334,10 @@ PlasmoidItem {
         return current.weatherDesc[0].value
     }
 
+    function normalizeWeatherData(data) {
+        return data && data.data ? data.data : data
+    }
+
     // Function to fetch weather from wttr.in
     function fetchWeather() {
         if (!location) {
@@ -332,15 +355,15 @@ PlasmoidItem {
                 loading = false
                 if (xhr.status === 200) {
                     try {
-                        var data = JSON.parse(xhr.responseText)
-                        parseWeatherData(data)
+                        var data = normalizeWeatherData(JSON.parse(xhr.responseText))
+                        updateFailed = !parseWeatherData(data)
                     } catch (e) {
                         console.error("Error parsing weather data:", e)
-                        weatherCondition = i18n("Error parsing data")
+                        updateFailed = true
                     }
                 } else {
                     console.error("Error fetching weather:", xhr.status)
-                    weatherCondition = i18n("Error fetching data")
+                    updateFailed = true
                 }
             }
         }
@@ -353,7 +376,7 @@ PlasmoidItem {
     function parseWeatherData(data) {
         if (!data || !data.current_condition || data.current_condition.length === 0) {
             console.error("Invalid weather data structure")
-            return
+            return false
         }
 
         var current = data.current_condition[0]
@@ -381,6 +404,7 @@ PlasmoidItem {
         lastUpdate = now.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
 
         console.log("Weather updated:", currentTemperature(), weatherCondition, iconName)
+        return true
     }
 
     function parseClockMinutes(value) {
