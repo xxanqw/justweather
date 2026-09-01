@@ -9,6 +9,7 @@ KCM.SimpleKCM {
     property alias cfg_iconSize: iconSizeSpinBox.value
     property alias cfg_showIcon: showIconCheck.checked
     property alias cfg_showTemperature: showTempCheck.checked
+    property alias cfg_compactTemperatureMode: compactTemperatureModeCombo.currentIndex
     property alias cfg_fontSize: fontSizeSpinBox.value
     property alias cfg_boldFont: boldFontCheck.checked
 
@@ -20,7 +21,7 @@ KCM.SimpleKCM {
             id: iconStyleCombo
             Kirigami.FormData.label: i18n("Icon style:")
             model: [i18n("Fill"), i18n("Line")]
-            
+
             QQC2.ToolTip.visible: hovered
             QQC2.ToolTip.text: i18n("Choose between filled or line icons")
         }
@@ -31,11 +32,11 @@ KCM.SimpleKCM {
             from: 16
             to: 64
             stepSize: 2
-            
+
             textFromValue: function(value) {
                 return i18n("%1 px", value)
             }
-            
+
             QQC2.ToolTip.visible: hovered
             QQC2.ToolTip.text: i18n("Icon size in compact/panel mode")
         }
@@ -43,7 +44,7 @@ KCM.SimpleKCM {
         QQC2.CheckBox {
             id: showIconCheck
             text: i18n("Show icon in compact mode")
-            
+
             QQC2.ToolTip.visible: hovered
             QQC2.ToolTip.text: i18n("Display weather icon when widget is in panel")
         }
@@ -53,17 +54,26 @@ KCM.SimpleKCM {
         }
 
         // Text settings
+        QQC2.ComboBox {
+            id: compactTemperatureModeCombo
+            Kirigami.FormData.label: i18n("Temperature value:")
+            model: [i18n("Actual"), i18n("Feels like")]
+
+            QQC2.ToolTip.visible: hovered
+            QQC2.ToolTip.text: i18n("Choose which temperature is shown in compact mode")
+        }
+
         QQC2.SpinBox {
             id: fontSizeSpinBox
             Kirigami.FormData.label: i18n("Font size (compact):")
             from: 8
             to: 32
             stepSize: 1
-            
+
             textFromValue: function(value) {
                 return i18n("%1 pt", value)
             }
-            
+
             QQC2.ToolTip.visible: hovered
             QQC2.ToolTip.text: i18n("Temperature text size in compact/panel mode")
         }
@@ -71,7 +81,7 @@ KCM.SimpleKCM {
         QQC2.CheckBox {
             id: showTempCheck
             text: i18n("Show temperature in compact mode")
-            
+
             QQC2.ToolTip.visible: hovered
             QQC2.ToolTip.text: i18n("Display temperature when widget is in panel")
         }
@@ -79,7 +89,7 @@ KCM.SimpleKCM {
         QQC2.CheckBox {
             id: boldFontCheck
             text: i18n("Use bold font")
-            
+
             QQC2.ToolTip.visible: hovered
             QQC2.ToolTip.text: i18n("Make temperature text bold")
         }
@@ -112,7 +122,7 @@ KCM.SimpleKCM {
             }
 
             QQC2.Label {
-                text: "23°C"
+                text: compactTemperatureModeCombo.currentIndex === 1 ? "21°C" : "23°C"
                 font.pixelSize: fontSizeSpinBox.value
                 font.bold: boldFontCheck.checked
                 visible: showTempCheck.checked

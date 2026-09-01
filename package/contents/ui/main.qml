@@ -40,6 +40,13 @@ PlasmoidItem {
         return plasmoid.configuration.temperatureUnit === 0 ? feelsLikeC : feelsLikeF
     }
 
+    function currentCompactTemperature() {
+        if (plasmoid.configuration.compactTemperatureMode === 1 && currentFeelsLike() !== "...") {
+            return currentFeelsLike()
+        }
+        return currentTemperature()
+    }
+
     function currentTodayMin() {
         return plasmoid.configuration.temperatureUnit === 0 ? todayMinC : todayMinF
     }
@@ -184,7 +191,7 @@ PlasmoidItem {
             }
 
             PlasmaComponents.Label {
-                text: root.currentTemperature() + root.temperatureSuffix()
+                text: root.currentCompactTemperature() + root.temperatureSuffix()
                 font.pixelSize: plasmoid.configuration.fontSize
                 font.bold: plasmoid.configuration.boldFont
                 visible: plasmoid.configuration.showTemperature

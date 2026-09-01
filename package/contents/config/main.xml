@@ -39,6 +39,9 @@
     <entry name="showTemperature" type="Bool">
       <default>true</default>
     </entry>
+    <entry name="compactTemperatureMode" type="Int">
+      <default>0</default>
+    </entry>
     <entry name="fontSize" type="Int">
       <default>12</default>
     </entry>
