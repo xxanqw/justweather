@@ -235,16 +235,22 @@ PlasmoidItem {
 
     // Full representation (expanded/desktop widget)
     fullRepresentation: Item {
-        Layout.minimumWidth: Kirigami.Units.gridUnit * 10
-        Layout.minimumHeight: Kirigami.Units.gridUnit * 14
-        Layout.preferredWidth: Kirigami.Units.gridUnit
-                               * (root.forecastEnabled ? 22 : 12)
-        Layout.preferredHeight: Kirigami.Units.gridUnit
-                                * (plasmoid.configuration.showHourlyForecast
-                                   && plasmoid.configuration.showDailyForecast ? 28
-                                   : (root.forecastEnabled ? 22 : 16))
+        implicitWidth: root.fullViewMinimumWidth()
+        implicitHeight: Math.max(Kirigami.Units.gridUnit * 14,
+                                 fullContentLayout.implicitHeight
+                                 + Kirigami.Units.largeSpacing * 2)
+
+        Layout.minimumWidth: implicitWidth
+        Layout.minimumHeight: implicitHeight
+        Layout.preferredWidth: root.forecastEnabled
+                               ? implicitWidth
+                               : Kirigami.Units.gridUnit * 12
+        Layout.preferredHeight: root.forecastEnabled
+                                ? implicitHeight
+                                : Math.max(implicitHeight, Kirigami.Units.gridUnit * 16)
 
         ColumnLayout {
+            id: fullContentLayout
             anchors.fill: parent
             anchors.margins: Kirigami.Units.largeSpacing
             spacing: Kirigami.Units.largeSpacing
@@ -282,16 +288,21 @@ PlasmoidItem {
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.minimumHeight: currentWeatherLayout.implicitHeight
+                Layout.preferredHeight: currentWeatherLayout.implicitHeight
 
                 ColumnLayout {
+                    id: currentWeatherLayout
                     anchors.centerIn: parent
                     spacing: 0
 
                     // Icon and temperature in single container
                     Item {
                         Layout.alignment: Qt.AlignHCenter
-                        implicitWidth: Math.max(weatherIcon.width, tempLabel.width)
-                        implicitHeight: weatherIcon.height + tempLabel.height
+                        implicitWidth: Math.max(weatherIcon.visible ? weatherIcon.width : 0,
+                                                tempLabel.visible ? tempLabel.width : 0)
+                        implicitHeight: (weatherIcon.visible ? weatherIcon.height : 0)
+                                        + (tempLabel.visible ? tempLabel.height : 0)
 
                         Kirigami.Icon {
                             id: weatherIcon
@@ -309,7 +320,7 @@ PlasmoidItem {
                             font.pixelSize: plasmoid.configuration.fullTempSize
                             font.bold: plasmoid.configuration.fullBoldTemp
                             anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.top: weatherIcon.bottom
+                            anchors.top: weatherIcon.visible ? weatherIcon.bottom : parent.top
                             anchors.topMargin: 0
                             visible: plasmoid.configuration.showFullTemp
                         }
@@ -376,7 +387,10 @@ PlasmoidItem {
 
                 Item {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: Kirigami.Units.gridUnit * 5
+                    Layout.minimumHeight: root.forecastStripHeight(
+                                              plasmoid.configuration.showHourlyIcons,
+                                              plasmoid.configuration.showHourlyPrecipitation)
+                    Layout.preferredHeight: Layout.minimumHeight
                     clip: true
 
                     Flickable {
@@ -397,7 +411,7 @@ PlasmoidItem {
                                 delegate: ColumnLayout {
                                     required property var modelData
 
-                                    Layout.minimumWidth: Kirigami.Units.gridUnit * 3
+                                    Layout.minimumWidth: root.forecastColumnWidth()
                                     Layout.alignment: Qt.AlignTop
                                     spacing: Kirigami.Units.smallSpacing
 
@@ -478,7 +492,10 @@ PlasmoidItem {
 
                 Item {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: Kirigami.Units.gridUnit * 5
+                    Layout.minimumHeight: root.forecastStripHeight(
+                                              plasmoid.configuration.showDailyIcons,
+                                              plasmoid.configuration.showDailyPrecipitation)
+                    Layout.preferredHeight: Layout.minimumHeight
                     clip: true
 
                     Flickable {
@@ -500,7 +517,7 @@ PlasmoidItem {
                                     required property var modelData
                                     required property int index
 
-                                    Layout.minimumWidth: Kirigami.Units.gridUnit * 3
+                                    Layout.minimumWidth: root.forecastColumnWidth()
                                     Layout.alignment: Qt.AlignTop
                                     spacing: Kirigami.Units.smallSpacing
 
@@ -717,6 +734,48 @@ PlasmoidItem {
             return i18n("Update failed")
         }
         return ""
+    }
+
+    function forecastColumnCount() {
+        var columns = 0
+
+        if (plasmoid.configuration.showHourlyForecast) {
+            var step = Math.max(1, plasmoid.configuration.hourlyForecastStep)
+            columns = Math.max(columns,
+                               Math.ceil(plasmoid.configuration.hourlyForecastHours / step))
+        }
+
+        if (plasmoid.configuration.showDailyForecast) {
+            columns = Math.max(columns, plasmoid.configuration.forecastDays)
+        }
+
+        // Keep very large forecasts scrollable instead of growing beyond seven columns.
+        return Math.min(7, Math.max(4, columns))
+    }
+
+    function fullViewMinimumWidth() {
+        var gridUnit = Kirigami.Units.gridUnit
+
+        if (!forecastEnabled) {
+            return gridUnit * 10
+        }
+
+        var columns = forecastColumnCount()
+        var forecastWidth = columns * forecastColumnWidth()
+            + (columns - 1) * Kirigami.Units.largeSpacing
+            + Kirigami.Units.largeSpacing * 2
+        return Math.max(gridUnit * 16, forecastWidth)
+    }
+
+    function forecastColumnWidth() {
+        return Kirigami.Units.gridUnit * 3.25
+    }
+
+    function forecastStripHeight(showIcons, showPrecipitation) {
+        var gridUnits = 2.3
+            + (showIcons ? 1.8 : 0)
+            + (showPrecipitation ? 0.9 : 0)
+        return Kirigami.Units.gridUnit * gridUnits
     }
 
     // Function to fetch weather from wttr.in
